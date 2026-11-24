@@ -881,18 +881,25 @@
           scope: "https://www.googleapis.com/auth/calendar",
           callback: function(resp){
             if (resp.error){
-              gError("接続がキャンセルされたか、エラーになりました: " + resp.error);
-              setSync("err", "接続できませんでした");
+              if (!silentAuth){
+                gError("接続がキャンセルされたか、エラーになりました: " + resp.error);
+                setSync("err", "接続できませんでした");
+              }
+              silentAuth = false;
               return;
             }
+            silentAuth = false;
             accessToken = resp.access_token;
             document.getElementById("gMsg").textContent = "";
             document.getElementById("gStatus").textContent = "接続しました。予定を読み込んでいます…";
             syncAll();
           },
           error_callback: function(err){
-            gError("ポップアップが開けませんでした。ブラウザのポップアップ許可を確認してください。（" + (err && err.type ? err.type : "error") + "）");
-            setSync("err", "接続できませんでした");
+            if (!silentAuth){
+              gError("ポップアップが開けませんでした。ブラウザのポップアップ許可を確認してください。（" + (err && err.type ? err.type : "error") + "）");
+              setSync("err", "接続できませんでした");
+            }
+            silentAuth = false;
           }
         });
       }
@@ -915,6 +922,24 @@
       }
       function gError(msg){
         document.getElementById("gMsg").textContent = msg;
+      }
+
+      /* On launch, if a client ID is already saved, try to reconnect silently
+         so the real events load without the user redoing the connect step.
+         Failures stay quiet and the sample events remain, as before. */
+      var silentAuth = false;
+      var autoTries = 0;
+      function tryAutoConnect(){
+        if (!clientId || accessToken) return;
+        if (!window.google || !google.accounts || !google.accounts.oauth2){
+          if (autoTries++ < 24) setTimeout(tryAutoConnect, 250);
+          return;
+        }
+        silentAuth = true;
+        try { ensureTokenClient(); }
+        catch(e){ silentAuth = false; return; }
+        try { tokenClient.requestAccessToken({ prompt: "" }); }
+        catch(e){ silentAuth = false; }
       }
 
       function syncBounds(){
@@ -1485,6 +1510,10 @@
 
       /* ================= detail panel ================= */
       var detail = document.getElementById("detail"), detailIn = document.getElementById("detailIn");
+      /* The day-detail strip under the calendar is shown only in month/week
+         views, and only after the user has tapped a date there. */
+      var detailArmed = false;
+      function detailAllowed(){ return currentView === "vgrid" || currentView === "month" || isWeekType(currentView); }
       function showDetail(k){
         var d = parseKey(k), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var h = '<h3>'+(d.getMonth()+1)+'月'+d.getDate()+'日（'+DOW[d.getDay()]+'）'
@@ -1496,7 +1525,7 @@
         });
         h += '<button class="d-add" id="dAdd">＋ この日に予定を追加</button>';
         detailIn.innerHTML = h;
-        detail.classList.add("open");
+        detail.classList.toggle("open", detailArmed && detailAllowed());
         detailIn.querySelectorAll("[data-ev]").forEach(function(b){
           b.addEventListener("click", function(){ openEdit(b.getAttribute("data-ev")); });
         });
@@ -1524,6 +1553,7 @@
         var t = e.target.closest("[data-date]");
         if (!t) return;
         selected = parseKey(t.getAttribute("data-date"));
+        if (detailAllowed()) detailArmed = true;
         markSelected(); renderWeek(); renderWeekCards(); renderDay(); showDetail(key(selected)); syncTitle();
       });
 
@@ -1864,6 +1894,7 @@
         stage.scrollTop = 0;
         if (id === "vgrid" || id === "vlist") scrollToToday(false);
         syncTitle();
+        showDetail(key(selected));
       }
       document.getElementById("toolbar").addEventListener("click", function(e){
         var b = e.target.closest("[data-view]"); if (!b) return;
@@ -2175,6 +2206,7 @@
       markSelected();
       showDetail(key(TODAY));
       syncTitle();
+      tryAutoConnect();
     </script>
   </body>
 </html>
