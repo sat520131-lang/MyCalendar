@@ -7,9 +7,11 @@
     <meta name="theme-color" content="#c0453e" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="マイカレンダー" />
-    <link rel="icon" href="data:," />
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <title>マイカレンダー</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
@@ -35,8 +37,9 @@
       }
       *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
       html,body{ height:100%; }
+      html{ background:var(--theme-deep); }
       body{
-        margin:0; background:var(--backdrop);
+        margin:0; background:var(--theme-deep);
         font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
         color:var(--ink);
         display:flex; justify-content:center;
@@ -58,7 +61,7 @@
       .l-ev[data-ev]{ cursor:pointer; }
       @media (min-width:560px){
         .app{ height:min(100dvh, 940px); margin:auto 0; border-radius:26px; box-shadow:var(--shadow); }
-        body{ align-items:center; }
+        body{ align-items:center; background:var(--backdrop); }
       }
       .sheet{
         flex:1; min-height:0; background:var(--sheet); border-radius:14px;
