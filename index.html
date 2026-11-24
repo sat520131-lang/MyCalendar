@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#c0453e" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="マイカレンダー" />
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
@@ -2145,6 +2145,18 @@
       document.getElementById("evDelBtn").addEventListener("click", deleteEditing);
 
       /* ================= init ================= */
+      /* iOS standalone: viewport height at launch can be measured short and
+         percentage heights stick to it, leaving a gap under the toolbar.
+         Pin the app height to the real innerHeight and re-check after launch. */
+      function fitAppHeight(){
+        var a = document.getElementById("app");
+        if (a) a.style.height = window.innerHeight + "px";
+      }
+      fitAppHeight();
+      window.addEventListener("resize", fitAppHeight);
+      window.addEventListener("orientationchange", function(){ setTimeout(fitAppHeight, 250); });
+      setTimeout(fitAppHeight, 300);
+      setTimeout(fitAppHeight, 1000);
       loadSettings();
       clientId = settings.clientId || "";
       document.getElementById("clientIdInput").value = clientId;
