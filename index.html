@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#c0453e" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="マイカレンダー" />
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
@@ -131,18 +131,37 @@
       .cell.sat .dnum{ color:var(--sat); }
       .cell.is-hol .dnum{ color:var(--sun); }
       .cell.dim .dnum{ color:var(--ink-3); }
-      .cell .hol{ font-size:7.8px; letter-spacing:-.03em; color:var(--sun); display:block; margin-top:1px; white-space:nowrap; overflow:hidden; }
-      .cell .rok{ font-size:7.8px; letter-spacing:-.03em; color:var(--ink-2); display:block; margin-top:1px; white-space:nowrap; overflow:hidden; }
+      .cell .hol{ font-size:10px; letter-spacing:-.03em; color:var(--sun); display:block; margin-top:1px; white-space:nowrap; overflow:hidden; }
+      .cell .rok{ font-size:10px; letter-spacing:-.03em; color:var(--ink-2); display:block; margin-top:1px; white-space:nowrap; overflow:hidden; }
       .cell .rok.good{ color:var(--sun); }
       .cell.is-today .dnum{ background:var(--today); color:#fff; border-radius:50%; font-weight:700; }
       .cell.is-sel{ background:color-mix(in srgb, var(--theme) 10%, transparent); border-radius:6px; box-shadow:inset 0 0 0 1.5px var(--theme); }
       .cell.drop-hint, .wcol.drop-hint, .wk-card.drop-hint{ box-shadow:inset 0 0 0 2px var(--theme); background:color-mix(in srgb, var(--theme) 12%, transparent); }
       .ev{
-        display:block; margin-top:2px; font-size:8.8px; line-height:1.45; padding:0 3px; border-radius:3px;
+        display:block; margin-top:2px; font-size:11px; line-height:1.4; padding:0 3px; border-radius:3px;
         color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:500;
-        touch-action:none;
+        touch-action:pan-y;
       }
       .ev.more{ background:transparent; color:var(--ink-2); font-weight:400; padding:0 3px; }
+      .ev.ph{ visibility:hidden; }
+      .ev.ms.c-l{ margin-left:-3px; border-top-left-radius:0; border-bottom-left-radius:0; }
+      .ev.ms.c-r{ margin-right:-3px; border-top-right-radius:0; border-bottom-right-radius:0; }
+      .week-head.wg{ padding-left:34px; }
+      .week-cols.wk-all{ padding:6px 6px 4px 34px; }
+      .wcol.wall{ min-height:26px; }
+      .wk-grid{ position:relative; margin:0 6px; }
+      .wk-grid .tg-h span{ width:28px; font-size:10px; }
+      .wk-tcols{ position:absolute; left:34px; right:0; top:0; bottom:0; display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+      .wcol.wt{ min-height:0; height:100%; position:relative; padding:0; }
+      .wt .w-ev{ position:absolute; box-sizing:border-box; margin:0; padding:2px 3px; }
+      .tpl-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+      .tpl-row[hidden]{ display:none; }
+      .tpl{ border:1px solid var(--line); border-radius:14px; padding:4px 10px; font-size:13px; cursor:pointer; background:var(--sheet-2); }
+      .tpl b{ margin-left:6px; color:var(--ink-3); font-weight:400; }
+      .tpl-save{ border:1px dashed var(--line); border-radius:14px; padding:4px 10px; font-size:13px; background:transparent; color:var(--ink-2); cursor:pointer; }
+      .toast{ position:fixed; left:12px; right:12px; bottom:calc(88px + env(safe-area-inset-bottom)); z-index:90; background:#2b2b2e; color:#fff; border-radius:12px; padding:10px 14px; display:flex; align-items:center; gap:12px; font-size:14px; max-width:456px; margin:0 auto; }
+      .toast[hidden]{ display:none; }
+      .toast button{ margin-left:auto; border:0; background:transparent; color:#8ab4ff; font-weight:700; font-size:14px; cursor:pointer; }
       .drag-ghost{
         position:fixed; z-index:60; pointer-events:none; color:#fff; font-size:11px; font-weight:600;
         padding:4px 8px; border-radius:5px; box-shadow:0 6px 18px rgba(0,0,0,.35); opacity:.92;
@@ -162,7 +181,7 @@
       .dayrow:active{ background:var(--sheet-2); }
       .dayrow .dcol{ width:38px; text-align:center; flex:none; }
       .dayrow .dcol b{ font-size:17px; font-weight:600; display:block; line-height:1.1; }
-      .dayrow .dcol span{ font-size:10px; color:var(--ink-2); }
+      .dayrow .dcol span{ font-size:11px; color:var(--ink-2); }
       .dayrow.sun .dcol b,.dayrow.sun .dcol span{ color:var(--sun); }
       .dayrow.sat .dcol b,.dayrow.sat .dcol span{ color:var(--sat); }
       .dayrow.is-hol .dcol b{ color:var(--sun); }
@@ -198,8 +217,8 @@
       .week-cols{ display:grid; grid-template-columns:repeat(7,1fr); padding:6px; gap:2px; }
       .wcol{ min-height:300px; border-left:1px solid var(--line-soft); padding:2px; cursor:pointer; }
       .wcol:first-child{ border-left:0; }
-      .w-ev{ font-size:9.5px; line-height:1.35; color:#fff; border-radius:4px; padding:3px 4px; margin-bottom:3px; overflow:hidden; touch-action:none; }
-      .w-ev time{ display:block; font-size:8.5px; opacity:.85; }
+      .w-ev{ font-size:10.5px; line-height:1.35; color:#fff; border-radius:4px; padding:3px 4px; margin-bottom:3px; overflow:hidden; touch-action:pan-y; }
+      .w-ev time{ display:block; font-size:9.5px; opacity:.85; }
 
       /* week card views (Staccal 2 style, split left/right) */
       .wk-wrap{ flex:1; min-height:0; display:flex; gap:6px; padding:6px; }
@@ -219,10 +238,10 @@
       .wk-rok{ font-size:9.5px; color:var(--ink-2); margin-left:auto; flex:none; }
       .wk-card.is-today .wk-num{ background:var(--today); color:#fff; border-radius:50%; width:27px; height:27px; line-height:27px; text-align:center; font-size:16px; }
       .wk-evs{ margin-top:4px; overflow:hidden; }
-      .wk-ev{ font-size:9.5px; line-height:1.3; color:#fff; border-radius:4px; padding:2.5px 5px; margin-bottom:2.5px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; touch-action:none; }
+      .wk-ev{ font-size:10.5px; line-height:1.3; color:#fff; border-radius:4px; padding:2.5px 5px; margin-bottom:2.5px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; touch-action:pan-y; }
       .wk-ev time{ font-size:8.5px; opacity:.85; margin-right:3px; }
       .wk-more{ font-size:9px; color:var(--ink-2); }
-      .wk-none{ font-size:10px; color:var(--ink-3); margin-top:2px; }
+      .wk-none{ font-size:11px; color:var(--ink-3); margin-top:2px; }
 
       /* day view */
       .day-hero{ text-align:center; padding:16px 10px 8px; }
@@ -235,12 +254,18 @@
       .tl-ev{ flex:1; border-radius:7px; color:#fff; padding:6px 9px; font-size:13px; font-weight:500; cursor:pointer; }
       .tl-ev small{ display:block; font-weight:400; font-size:11px; opacity:.85; }
       .tl-none{ flex:1; font-size:12px; color:var(--ink-3); padding-top:3px; }
+      .tg{ position:relative; margin:2px 14px 24px; }
+      .tg-h{ position:absolute; left:0; right:0; border-top:1px solid var(--line-soft); }
+      .tg-h span{ position:absolute; left:0; top:-7px; width:38px; text-align:right; font-size:11px; color:var(--ink-2); background:var(--sheet); padding-right:2px; }
+      .tg-ev{ position:absolute; box-sizing:border-box; border-radius:6px; padding:3px 6px; font-size:12px; line-height:1.3; overflow:hidden; cursor:pointer; }
+      .tg-ev span{ font-size:11px; opacity:.85; }
+      .tg-now{ position:absolute; left:44px; right:0; border-top:2px solid var(--sun); pointer-events:none; }
 
       /* list / search */
       .searchbar{ padding:10px 12px 4px; }
       .searchbar input{
         width:100%; border:1px solid var(--line); background:var(--sheet-2); border-radius:9px;
-        padding:8px 12px; font-size:14px; color:var(--ink); min-height:38px;
+        padding:8px 12px; font-size:16px; color:var(--ink); min-height:38px;
       }
       .list-note{ padding:10px 14px; font-size:11.5px; color:var(--ink-3); }
 
@@ -275,7 +300,7 @@
         display:flex; flex-direction:column; align-items:center; gap:2px; padding:5px 0 3px; border-radius:9px; min-height:48px; min-width:0;
       }
       .tbtn svg{ width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:1.4; flex:none; }
-      .tbtn span{ font-size:9px; letter-spacing:.02em; white-space:nowrap; }
+      .tbtn span{ font-size:11px; letter-spacing:.02em; white-space:nowrap; }
       .tbtn.on{ background:rgba(255,255,255,.92); color:#333; box-shadow:0 1px 4px rgba(0,0,0,.25); }
 
       /* ---------- Popovers / sheets ---------- */
@@ -315,7 +340,7 @@
       .set-row .set-label small{ display:block; font-size:11px; color:var(--ink-2); margin-top:1px; }
       .set-row select{
         border:1px solid var(--line); border-radius:8px; background:var(--sheet); color:var(--ink);
-        font-size:13px; padding:6px 8px; min-height:36px; max-width:55%; font-family:inherit;
+        font-size:16px; padding:6px 8px; min-height:36px; max-width:55%; font-family:inherit;
       }
       label.set-check{ display:flex; align-items:center; gap:9px; min-height:38px; cursor:pointer; font-size:13.5px; padding:2px 0; }
       label.set-check input{ width:18px; height:18px; min-height:0; flex:none; }
@@ -334,7 +359,7 @@
 
       form.ev-form label{ display:block; font-size:12px; color:var(--ink-2); margin:12px 0 5px; font-weight:600; }
       form.ev-form input, form.ev-form select, form.ev-form textarea{
-        width:100%; max-width:100%; min-width:0; border:1px solid var(--line); border-radius:9px; padding:8px 10px; font-size:15px;
+        width:100%; max-width:100%; min-width:0; border:1px solid var(--line); border-radius:9px; padding:8px 10px; font-size:16px;
         background:var(--sheet); color:var(--ink); min-height:40px; font-family:inherit;
       }
       /* native date/time inputs have an intrinsic minimum width on phones that
@@ -347,7 +372,7 @@
       form.ev-form textarea{ resize:vertical; min-height:56px; }
       .form-row{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px; max-width:100%; }
       .form-row > div{ min-width:0; }
-      .form-row > div:first-child{ grid-column:1 / -1; }
+      
       @media (max-width:400px){
         form.ev-form input, form.ev-form select{ padding:8px; }
       }
@@ -361,7 +386,7 @@
       .steps{ margin:6px 0 0; padding-left:20px; font-size:12.5px; line-height:1.75; color:var(--ink); }
       .steps a{ color:var(--accent-text); }
       .steps code{ background:var(--sheet-2); border:1px solid var(--line-soft); border-radius:4px; padding:0 4px; font-size:11.5px; word-break:break-all; }
-      .g-input{ width:100%; border:1px solid var(--line); border-radius:9px; padding:8px 10px; font-size:13px; background:var(--sheet); color:var(--ink); min-height:42px; margin-top:6px; }
+      .g-input{ width:100%; border:1px solid var(--line); border-radius:9px; padding:8px 10px; font-size:16px; background:var(--sheet); color:var(--ink); min-height:42px; margin-top:6px; }
       .g-connect{ width:100%; margin-top:12px; border:0; border-radius:10px; min-height:44px; font-size:15px; font-weight:700; color:#fff; background:#4285f4; cursor:pointer; }
       .g-disconnect{ width:100%; margin-top:10px; border:1px solid var(--line); border-radius:10px; min-height:40px; font-size:13px; font-weight:600; color:var(--ink-2); background:transparent; cursor:pointer; }
       .g-msg{ font-size:12px; margin-top:10px; line-height:1.6; color:var(--ink-2); }
@@ -410,7 +435,7 @@
           </button>
         </header>
 
-        <div class="syncbar" id="syncbar" style="display:none" aria-hidden="true">
+        <div class="syncbar" id="syncbar">
           <span class="dot" id="syncDot" aria-hidden="true"></span>
           <span class="stext" id="syncText">Googleカレンダー未接続</span>
           <button id="resyncBtn" hidden>更新</button>
@@ -490,6 +515,7 @@
         <button class="refill on" data-refill="white"><span class="chip" style="background:#ffffff"></span>ホワイト</button>
         <button class="refill" data-refill="cream"><span class="chip" style="background:#faf3e3"></span>クリーム</button>
         <button class="refill" data-refill="dark"><span class="chip" style="background:#26262b"></span>ダーク</button>
+        <button class="refill" data-refill="auto"><span class="chip" style="background:linear-gradient(90deg,#ffffff 50%,#26262b 50%)"></span>自動</button>
       </div>
 
       <h4>週と暦</h4>
@@ -532,13 +558,15 @@
       <h3 class="pop-title" id="evPopTitle">予定を追加</h3>
       <form class="ev-form" id="evForm">
         <label for="evTitle">タイトル</label>
-        <input id="evTitle" type="text" placeholder="例：打ち合わせ" autocomplete="off" />
+        <input id="evTitle" type="text" placeholder="例：打ち合わせ" autocomplete="off" list="titleList" /><datalist id="titleList"></datalist>
+        <div class="tpl-row" id="tplRow" hidden></div>
         <label for="evCal">カレンダー</label>
         <select id="evCal"></select>
         <div class="form-row">
-          <div><label for="evDate">日付</label><input id="evDate" type="date" /></div>
-          <div><label for="evTime">開始</label><input id="evTime" type="time" value="10:00" /></div>
-          <div><label for="evEnd">終了</label><input id="evEnd" type="time" value="11:00" /></div>
+          <div><label for="evDate">開始日</label><input id="evDate" type="date" /></div>
+          <div><label for="evEndDate">終了日</label><input id="evEndDate" type="date" /></div>
+          <div><label for="evTime">開始時刻</label><input id="evTime" type="time" value="10:00" /></div>
+          <div><label for="evEnd">終了時刻</label><input id="evEnd" type="time" value="11:00" /></div>
         </div>
         <label class="checkline"><input type="checkbox" id="evAllDay" /> 終日の予定にする</label>
         <label for="evLoc">場所</label>
@@ -569,6 +597,7 @@
       <button class="pop-close" data-close>キャンセル</button>
     </div>
 
+    <div class="toast" id="toast" hidden><span id="toastMsg"></span><button type="button" id="toastUndo">元に戻す</button></div>
     <script>
       "use strict";
       /* ================= helpers ================= */
@@ -688,7 +717,7 @@
         lastView: "month",
         themePreset: "red",
         customTheme: { frame:"#d9534f", paper:"#ffffff", ink:"#2b2b2e", today:"#d94f3d" },
-        refill: "white",
+        refill: "auto",
         weekStart: 1,
         showHolidays: true,
         showRokuyo: true,
@@ -696,6 +725,8 @@
         enabledViews: ["month", "week", "day", "list"],
         gestures: { drag:true, dbltap:true, longpress:true, swipeDelete:true, swipeNav:true, twoFingerSwipe:true },
         calColors: {},
+        consented: false,
+        templates: [],
         clientId: ""
       };
       function saveSettings(){ try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch(e){} }
@@ -727,6 +758,7 @@
       function viewEnabled(id){ return settings.enabledViews.indexOf(id) >= 0; }
 
       /* ================= appearance ================= */
+      function resolveRefill(v){ return v === "auto" ? ((window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "white") : v; }
       function applyAppearance(){
         var root = document.documentElement.style;
         var preset = null, i;
@@ -755,12 +787,12 @@
           root.setProperty("--theme-deep", preset.deep);
           root.setProperty("--backdrop", preset.backdrop);
           document.querySelector('meta[name="theme-color"]').setAttribute("content", preset.deep);
-          var r = REFILLS[settings.refill] || REFILLS.white;
+          var rk0 = resolveRefill(settings.refill), r = REFILLS[rk0] || REFILLS.white;
           root.setProperty("--sheet", r.sheet); root.setProperty("--sheet-2", r.sheet2);
           root.setProperty("--ink", r.ink); root.setProperty("--ink-2", r.ink2); root.setProperty("--ink-3", r.ink3);
           root.setProperty("--line", r.line); root.setProperty("--line-soft", r.soft);
           root.setProperty("--sun", r.sun); root.setProperty("--sat", r.sat); root.setProperty("--today", r.today);
-          root.setProperty("--accent-text", settings.refill === "dark" ? mixColor(preset.theme, "#ffffff", 0.5) : preset.deep);
+          root.setProperty("--accent-text", rk0 === "dark" ? mixColor(preset.theme, "#ffffff", 0.5) : preset.deep);
         }
         document.querySelectorAll("#presetRow .preset").forEach(function(b){
           b.classList.toggle("on", b.getAttribute("data-preset") === settings.themePreset);
@@ -822,14 +854,28 @@
       events = buildSampleEvents();
 
       function calById(id){ for (var i=0;i<calendars.length;i++) if (calendars[i].id===id) return calendars[i]; return null; }
-      function isVisible(e){ return !hiddenCals[e.calendarId]; }
-      function evsOn(k){
-        return events.filter(function(e){
-          return isVisible(e) && e.startKey <= k && k < e.endKeyExcl;
-        }).sort(function(a,b){
-          if (a.allDay !== b.allDay) return a.allDay ? -1 : 1;
-          return a.timeLabel < b.timeLabel ? -1 : 1;
+      function isVisible(e){ return !hiddenCals[e.calendarId] && !(settings.showHolidays && /#holiday@group\.v\.calendar\.google\.com$/.test(e.calendarId)); }
+      function cmpEv(a, b){
+        if (a.allDay !== b.allDay) return a.allDay ? -1 : 1;
+        if (a.timeLabel !== b.timeLabel) return a.timeLabel < b.timeLabel ? -1 : 1;
+        return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
+      }
+      var dayIdx = {}, idxDirty = true;
+      function buildIdx(){
+        dayIdx = {}; idxDirty = false;
+        events.forEach(function(e){
+          var d = parseKey(e.startKey);
+          for (var n = 0; n < 400; n++){
+            var k = key(d); if (k >= e.endKeyExcl) break;
+            (dayIdx[k] = dayIdx[k] || []).push(e);
+            d.setDate(d.getDate() + 1);
+          }
         });
+        Object.keys(dayIdx).forEach(function(k){ dayIdx[k].sort(cmpEv); });
+      }
+      function evsOn(k){
+        if (idxDirty) buildIdx();
+        return (dayIdx[k] || []).filter(isVisible);
       }
       function findEvent(uid){ for (var i=0;i<events.length;i++) if (events[i].uid===uid) return events[i]; return null; }
       function holOf(k){ return settings.showHolidays ? (HOLIDAYS[k] || null) : null; }
@@ -844,7 +890,7 @@
         syncDot.className = "dot" + (state ? " " + state : "");
         if (text) syncText.textContent = text;
         var connected = !!accessToken;
-        syncBtn.textContent = connected ? "設定" : "接続";
+        syncBtn.textContent = connected ? "カレンダー" : (clientId ? "再接続" : "接続");
         syncBtn.classList.toggle("primary", !connected);
         resyncBtn.hidden = !connected;
       }
@@ -881,25 +927,18 @@
           scope: "https://www.googleapis.com/auth/calendar",
           callback: function(resp){
             if (resp.error){
-              if (!silentAuth){
-                gError("接続がキャンセルされたか、エラーになりました: " + resp.error);
-                setSync("err", "接続できませんでした");
-              }
-              silentAuth = false;
+              gError("接続がキャンセルされたか、エラーになりました: " + resp.error);
+              setSync("err", "接続できませんでした");
               return;
             }
-            silentAuth = false;
-            accessToken = resp.access_token;
+            accessToken = resp.access_token; settings.consented = true; saveSettings();
             document.getElementById("gMsg").textContent = "";
             document.getElementById("gStatus").textContent = "接続しました。予定を読み込んでいます…";
             syncAll();
           },
           error_callback: function(err){
-            if (!silentAuth){
-              gError("ポップアップが開けませんでした。ブラウザのポップアップ許可を確認してください。（" + (err && err.type ? err.type : "error") + "）");
-              setSync("err", "接続できませんでした");
-            }
-            silentAuth = false;
+            gError("ポップアップが開けませんでした。ブラウザのポップアップ許可を確認してください。（" + (err && err.type ? err.type : "error") + "）");
+            setSync("err", "接続できませんでした");
           }
         });
       }
@@ -918,38 +957,136 @@
         try { ensureTokenClient(); }
         catch(e){ gError(e.message); return; }
         document.getElementById("gMsg").textContent = "";
-        tokenClient.requestAccessToken({ prompt: accessToken ? "" : "consent" });
+        tokenClient.requestAccessToken({ prompt: settings.consented ? "" : "consent" });
       }
       function gError(msg){
         document.getElementById("gMsg").textContent = msg;
       }
 
-      /* On launch, if a client ID is already saved, try to reconnect silently
-         so the real events load without the user redoing the connect step.
-         Failures stay quiet and the sample events remain, as before. */
-      var silentAuth = false;
-      var autoTries = 0;
-      function tryAutoConnect(){
-        if (!clientId || accessToken) return;
-        if (!window.google || !google.accounts || !google.accounts.oauth2){
-          if (autoTries++ < 24) setTimeout(tryAutoConnect, 250);
-          return;
-        }
-        silentAuth = true;
-        try { ensureTokenClient(); }
-        catch(e){ silentAuth = false; return; }
-        try { tokenClient.requestAccessToken({ prompt: "" }); }
-        catch(e){ silentAuth = false; }
-      }
-
       function syncBounds(){
-        /* fixed to the full period */
-        return [new Date(2010,0,1), new Date(2040,11,31,23,59,59)];
+        /* display range plus a margin */
+        return [new Date(RANGE_START.getFullYear(), RANGE_START.getMonth()-1, 1), new Date(RANGE_END.getFullYear(), RANGE_END.getMonth(), RANGE_END.getDate()+30, 23, 59, 59)];
+      }
+      var CACHE_KEY = "mycal.cache.v1", LOCAL_KEY = "mycal.local.v1", PRE = {}, dbP = null;
+      function kvOpen(){
+        return dbP || (dbP = new Promise(function(res){
+          try {
+            var r = indexedDB.open("mycal", 1);
+            r.onupgradeneeded = function(){ r.result.createObjectStore("kv"); };
+            r.onsuccess = function(){ res(r.result); };
+            r.onerror = function(){ res(null); };
+          } catch(e){ res(null); }
+        }));
+      }
+      function kvGet(k){
+        return kvOpen().then(function(d){
+          if (!d) return null;
+          return new Promise(function(res){
+            try { var q = d.transaction("kv").objectStore("kv").get(k); q.onsuccess = function(){ res(q.result === undefined ? null : q.result); }; q.onerror = function(){ res(null); }; }
+            catch(e){ res(null); }
+          });
+        });
+      }
+      function kvSet(k, v){
+        kvOpen().then(function(d){
+          var fb = function(){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
+          if (!d) return fb();
+          try {
+            var t = d.transaction("kv", "readwrite"); t.objectStore("kv").put(v, k);
+            t.oncomplete = function(){ try { localStorage.removeItem(k); } catch(e){} };
+            t.onerror = fb; t.onabort = fb;
+          } catch(e){ fb(); }
+        });
+      }
+      function kvDel(k){
+        kvOpen().then(function(d){ if (d) try { d.transaction("kv", "readwrite").objectStore("kv").delete(k); } catch(e){} });
+        try { localStorage.removeItem(k); } catch(e){}
+      }
+      function lsGet(k){ try { return JSON.parse(localStorage.getItem(k) || "null"); } catch(e){ return null; } }
+      function kvLoad(){
+        return Promise.all([kvGet(CACHE_KEY), kvGet(LOCAL_KEY)]).then(function(r){ PRE.cache = r[0]; PRE.local = r[1]; });
+      }
+      function fg(c){ return luminance(c) > 0.62 ? "#222" : "#fff"; }
+      function toMin(t){ var p = (t || "0:0").split(":"); return (+p[0]) * 60 + (+p[1]); }
+      function fmtMin(m){ return pad(Math.floor(m / 60)) + ":" + pad(m % 60); }
+      var evDur = 60, prevEvDate = "", detailArmed = false;
+      function syncDur(){ var d = toMin(document.getElementById("evEnd").value) - toMin(document.getElementById("evTime").value); evDur = d > 0 ? d : 60; }
+      function renderTpl(){
+        var row = document.getElementById("tplRow"), list = settings.templates || [];
+        row.hidden = false;
+        row.innerHTML = list.map(function(t, i){ return '<span class="tpl" data-i="' + i + '">' + esc(t.title) + '<b data-del="' + i + '">×</b></span>'; }).join("")
+          + '<button type="button" class="tpl-save" id="tplSave">＋ 今の内容を登録</button>';
+      }
+      function tplClick(e){
+        var list = settings.templates || [], del = e.target.closest("[data-del]"), chip = e.target.closest(".tpl");
+        if (e.target.id === "tplSave"){
+          var title = document.getElementById("evTitle").value.trim(); if (!title) return;
+          var t = { title: title, loc: document.getElementById("evLoc").value.trim(), allDay: document.getElementById("evAllDay").checked,
+                    st: document.getElementById("evTime").value, en: document.getElementById("evEnd").value };
+          list = list.filter(function(x){ return x.title !== title; }); list.unshift(t);
+          settings.templates = list.slice(0, 8); saveSettings(); renderTpl(); return;
+        }
+        if (del){ list.splice(+del.getAttribute("data-del"), 1); settings.templates = list; saveSettings(); renderTpl(); return; }
+        if (!chip) return;
+        var t2 = list[+chip.getAttribute("data-i")]; if (!t2) return;
+        document.getElementById("evTitle").value = t2.title; document.getElementById("evLoc").value = t2.loc || "";
+        var ad = document.getElementById("evAllDay"); ad.checked = !!t2.allDay; ad.dispatchEvent(new Event("change"));
+        if (t2.st) document.getElementById("evTime").value = t2.st; if (t2.en) document.getElementById("evEnd").value = t2.en;
+        syncDur();
+      }
+      function fillTitleList(){
+        var seen = {}, out = [];
+        events.slice().sort(function(a, b){ return a.startKey < b.startKey ? 1 : -1; }).forEach(function(e){
+          if (out.length < 30 && e.title && !e.local && e.title !== "（無題）" && !seen[e.title]){ seen[e.title] = 1; out.push(e.title); }
+        });
+        document.getElementById("titleList").innerHTML = out.map(function(t){ return '<option value="' + esc(t) + '">'; }).join("");
+      }
+      var syncPending = false, lastSync = 0;
+      var SYNC_FIELDS = "&fields=" + encodeURIComponent("items(id,status,summary,location,description,start,end),nextPageToken");
+      var TZ = ""; try { TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch(e){}
+      function addDays(k, n){ var d = parseKey(k); d.setDate(d.getDate() + n); return key(d); }
+      function timedBody(sKey, lastKey, st, et){
+        if (lastKey === sKey && et <= st) lastKey = addDays(sKey, 1);
+        var a = { dateTime: sKey + "T" + st + ":00" }, b = { dateTime: lastKey + "T" + et + ":00" };
+        if (TZ){ a.timeZone = TZ; b.timeZone = TZ; }
+        return { start: a, end: b };
+      }
+      function slim(e){ var o = Object.assign({}, e); delete o.startDateObj; return o; }
+      function revive(e){ e.startDateObj = parseKey(e.startKey); return e; }
+      function saveCache(){
+        kvSet(CACHE_KEY, { t: Date.now(), calendars: calendars, hidden: hiddenCals, events: events.filter(function(e){ return !e.local; }).map(slim) });
+      }
+      function saveLocal(){
+        kvSet(LOCAL_KEY, events.filter(function(e){ return e.local && e.calendarId === "__local"; }).map(slim));
+      }
+      function loadStored(){
+        var locals = [], cache = null;
+        locals = (PRE.local || lsGet(LOCAL_KEY) || []).map(revive);
+        cache = PRE.cache || lsGet(CACHE_KEY);
+        if (cache && cache.events){
+          calendars = cache.calendars || []; hiddenCals = cache.hidden || {};
+          events = cache.events.map(revive).concat(locals);
+          return cache.t;
+        }
+        events = buildSampleEvents().concat(locals);
+        return 0;
+      }
+      function applyItem(item, calId, oldUid){
+        var cal = calById(calId), ev = cal ? normalizeEvent(item, cal) : null;
+        if (!ev){ syncAll(); return; }
+        events = events.filter(function(x){ return x.uid !== oldUid && x.uid !== ev.uid; });
+        events.push(ev);
+        saveCache(); renderAll(); observeLabels(); markSelected(); showDetail(key(selected)); syncTitle();
+      }
+      function dropEvent(uid){
+        events = events.filter(function(x){ return x.uid !== uid; });
+        saveCache(); saveLocal(); renderAll(); observeLabels(); markSelected(); showDetail(key(selected));
       }
       function syncAll(){
-        if (!accessToken || syncing) return;
+        if (!accessToken) return;
+        if (syncing){ syncPending = true; return; }
         syncing = true;
-        setSync("busy", "同期中… カレンダー一覧を取得しています");
+        setSync("busy", "同期中…");
         apiFetch("/users/me/calendarList?maxResults=250&showHidden=false")
         .then(function(data){
           calendars = (data.items || []).map(function(c, i){
@@ -957,39 +1094,37 @@
                      color: settings.calColors[c.id] || PALETTE[i % PALETTE.length],
                      accessRole:c.accessRole || "reader", primary:!!c.primary, timeZone:c.timeZone || "" };
           });
-          renderCalList();
-          renderCalOptions();
-          var b = syncBounds();
-          var timeMin = b[0].toISOString(), timeMax = b[1].toISOString();
-          var all = [];
-          var chain = Promise.resolve();
-          calendars.forEach(function(cal, idx){
-            chain = chain.then(function(){
-              setSync("busy", "同期中… " + cal.summary + "（" + (idx+1) + "/" + calendars.length + "）");
-              return fetchCalEvents(cal, timeMin, timeMax, null, []).then(function(list){
-                list.forEach(function(e){ all.push(e); });
-              }).catch(function(){ /* one calendar failing should not block the rest */ });
+          renderCalList(); renderCalOptions();
+          var b = syncBounds(), failed = [];
+          return Promise.all(calendars.map(function(cal){
+            return fetchCalEvents(cal, b[0].toISOString(), b[1].toISOString(), null, []).catch(function(e){
+              if (e.message === "auth") throw e;
+              failed.push(cal); return [];
             });
-          });
-          return chain.then(function(){
-            events = all;
-            syncing = false;
-            var now = new Date();
-            setSync("on", "同期済み " + pad(now.getHours()) + ":" + pad(now.getMinutes()) + " ・ " + calendars.length + "カレンダー / " + events.length + "件");
+          })).then(function(lists){
+            var failedIds = failed.map(function(c){ return c.id; });
+            var keep = events.filter(function(x){ return (x.local && x.calendarId === "__local") || failedIds.indexOf(x.calendarId) >= 0; });
+            events = [].concat.apply([], lists).concat(keep);
+            syncing = false; lastSync = Date.now();
+            saveCache();
+            var n = new Date(lastSync);
+            setSync(failed.length ? "err" : "on", failed.length
+              ? "一部取得できませんでした: " + failed.map(function(c){ return c.summary; }).join("、")
+              : "同期済み " + pad(n.getHours()) + ":" + pad(n.getMinutes()) + " ・ " + calendars.length + "カレンダー / " + events.length + "件");
             document.getElementById("gStatus").textContent = "接続中: " + calendars.length + "件のカレンダー、予定 " + events.length + " 件を表示しています。";
             document.getElementById("calSection").hidden = false;
-            renderConnectCard();
             renderAll(); observeLabels(); markSelected(); showDetail(key(selected));
+            if (syncPending){ syncPending = false; syncAll(); }
           });
         })
         .catch(function(e){
-          syncing = false;
+          syncing = false; syncPending = false;
           if (e.message !== "auth") setSync("err", "同期に失敗しました: " + e.message);
         });
       }
       function fetchCalEvents(cal, timeMin, timeMax, pageToken, acc){
         var q = "?timeMin=" + encodeURIComponent(timeMin) + "&timeMax=" + encodeURIComponent(timeMax)
-          + "&singleEvents=true&orderBy=startTime&maxResults=2500"
+          + "&singleEvents=true&orderBy=startTime&maxResults=2500" + SYNC_FIELDS
           + (pageToken ? "&pageToken=" + encodeURIComponent(pageToken) : "");
         return apiFetch("/calendars/" + encodeURIComponent(cal.id) + "/events" + q).then(function(data){
           (data.items || []).forEach(function(it){
@@ -1036,23 +1171,25 @@
       }
 
       /* ---- write operations ---- */
-      function buildPayload(){
-        var title = document.getElementById("evTitle").value.trim();
+      function buildPayload(cur){
         var date = document.getElementById("evDate").value;
         var allDay = document.getElementById("evAllDay").checked;
-        var body = { summary: title,
+        var body = { summary: document.getElementById("evTitle").value.trim(),
                      location: document.getElementById("evLoc").value.trim(),
                      description: document.getElementById("evDesc").value };
+        var last = document.getElementById("evEndDate").value || date; if (last < date) last = date;
         if (allDay){
-          var d = parseKey(date); var nx = new Date(d); nx.setDate(nx.getDate()+1);
-          body.start = { date: date }; body.end = { date: key(nx) };
+          body.start = { date: date }; body.end = { date: addDays(last, 1) };
         } else {
           var t1 = document.getElementById("evTime").value || "10:00";
           var t2 = document.getElementById("evEnd").value || "11:00";
-          body.start = { dateTime: date + "T" + t1 + ":00" };
-          body.end = { dateTime: date + "T" + t2 + ":00" };
+          var tb = timedBody(date, last, t1, t2);
+          body.start = tb.start; body.end = tb.end;
         }
         return body;
+      }
+      function updateSaveLabel(){
+        document.getElementById("evSaveBtn").textContent = document.getElementById("evCal").value === "__local" ? "保存する（この端末のみ）" : "Googleカレンダーに保存";
       }
       function saveEvent(ev){
         ev.preventDefault();
@@ -1061,57 +1198,35 @@
         var title = document.getElementById("evTitle").value.trim();
         var date = document.getElementById("evDate").value;
         var calId = document.getElementById("evCal").value;
+        var cur = editingUid ? findEvent(editingUid) : null;
         if (!title){ msg.textContent = "タイトルを入力してください。"; return; }
         if (!date){ msg.textContent = "日付を選んでください。"; return; }
-        if (!accessToken || calId === "__local"){ saveLocalFromForm(title, date); return; }
-        if (!calId){ msg.textContent = "保存先のカレンダーがありません。"; return; }
-        var body = buildPayload();
-        var btn = document.getElementById("evSaveBtn");
-        btn.disabled = true; btn.textContent = "保存中…";
-        var req;
-        if (editingUid){
-          var cur = findEvent(editingUid);
-          if (cur && cur.calendarId !== calId){
-            req = apiFetch("/calendars/" + encodeURIComponent(cur.calendarId) + "/events/" + encodeURIComponent(cur.id), { method:"DELETE" })
-              .then(function(){ return apiFetch("/calendars/" + encodeURIComponent(calId) + "/events", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) }); });
-          } else {
-            req = apiFetch("/calendars/" + encodeURIComponent(calId) + "/events/" + encodeURIComponent(cur.id), { method:"PATCH", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
-          }
-        } else {
-          req = apiFetch("/calendars/" + encodeURIComponent(calId) + "/events", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
+        if (calId === "__local"){
+          if (cur && !cur.local){ msg.textContent = "Googleの予定は端末内に移せません。"; return; }
+          saveLocalFromForm(title, date); return;
         }
-        req.then(function(){
-          btn.disabled = false; btn.textContent = "Googleカレンダーに保存";
+        if (!accessToken){ msg.textContent = "Googleに接続していません。「再接続」してから保存してください（保存先を「この端末のみ」にすると端末内に保存できます）。"; return; }
+        if (!calId){ msg.textContent = "保存先のカレンダーがありません。"; return; }
+        var body = buildPayload(cur), btn = document.getElementById("evSaveBtn");
+        var enc = encodeURIComponent, base = "/calendars/" + enc(calId) + "/events", H = {"Content-Type":"application/json"};
+        var req, js = JSON.stringify(body);
+        btn.disabled = true; btn.textContent = "保存中…";
+        if (!cur || cur.local) req = apiFetch(base, { method:"POST", headers:H, body: js });
+        else if (cur.calendarId !== calId) req = apiFetch("/calendars/" + enc(cur.calendarId) + "/events/" + enc(cur.id) + "/move?destination=" + enc(calId), { method:"POST" })
+          .then(function(m){ return apiFetch(base + "/" + enc(m.id), { method:"PATCH", headers:H, body: js }); });
+        else req = apiFetch(base + "/" + enc(cur.id), { method:"PATCH", headers:H, body: js });
+        req.then(function(item){
+          btn.disabled = false; updateSaveLabel();
           closePops();
           selected = parseKey(date);
-          syncAll();
+          if (cur && cur.local){ events = events.filter(function(x){ return x.uid !== cur.uid; }); saveLocal(); }
+          applyItem(item, calId, cur ? cur.uid : null);
         }).catch(function(e){
-          btn.disabled = false; btn.textContent = "Googleカレンダーに保存";
-          msg.textContent = "保存できませんでした: " + e.message;
+          btn.disabled = false; updateSaveLabel();
+          msg.textContent = "保存できませんでした: " + (e.message === "auth" ? "認証の有効期限が切れました。「再接続」してください" : e.message);
         });
       }
-      function deleteEditing(){
-        if (!editingUid) return;
-        var cur = findEvent(editingUid); if (!cur) return;
-        if (cur.local){
-          events = events.filter(function(x){ return x.uid !== cur.uid; });
-          closePops();
-          renderAll(); observeLabels(); markSelected(); showDetail(key(selected));
-          return;
-        }
-        var msg = document.getElementById("evMsg");
-        var btn = document.getElementById("evDelBtn");
-        btn.disabled = true; btn.textContent = "削除中…";
-        apiFetch("/calendars/" + encodeURIComponent(cur.calendarId) + "/events/" + encodeURIComponent(cur.id), { method:"DELETE" })
-        .then(function(){
-          btn.disabled = false; btn.textContent = "この予定を削除";
-          closePops();
-          syncAll();
-        }).catch(function(e){
-          btn.disabled = false; btn.textContent = "この予定を削除";
-          msg.textContent = "削除できませんでした: " + e.message;
-        });
-      }
+      function deleteEditing(){ if (editingUid) requestDeleteEvent(editingUid); }
       /* save the form as an on-device event while Google is not connected */
       function saveLocalFromForm(title, date){
         var allDay = document.getElementById("evAllDay").checked;
@@ -1119,7 +1234,7 @@
         var t2 = document.getElementById("evEnd").value || "11:00";
         var loc = document.getElementById("evLoc").value.trim();
         var desc = document.getElementById("evDesc").value;
-        var d = parseKey(date); var nx = new Date(d); nx.setDate(nx.getDate()+1);
+        var d = parseKey(date); var ed = document.getElementById("evEndDate").value || date; if (ed < date) ed = date; var nx = parseKey(ed); nx.setDate(nx.getDate()+1);
         var cur = editingUid ? findEvent(editingUid) : null;
         if (cur && cur.local){
           cur.title = title; cur.location = loc; cur.description = desc;
@@ -1142,6 +1257,7 @@
             writable: true, local: true
           });
         }
+        saveLocal();
         closePops();
         selected = parseKey(date);
         renderAll(); observeLabels(); markSelected(); showDetail(date); syncTitle();
@@ -1159,30 +1275,53 @@
         var endD = parseKey(target.endKeyExcl); endD.setDate(endD.getDate() + delta);
         target.startKey = newKey; target.endKeyExcl = key(endD);
         target.startDateObj = parseKey(newKey);
-        selected = parseKey(newKey);
+        selected = parseKey(newKey); saveLocal();
         renderAll(); observeLabels(); markSelected(); showDetail(newKey); syncTitle();
       }
-      function moveEvent(uid, newKey){
+      var toastT = null, toastFn = null;
+      function showUndo(msg, fn){
+        var t = document.getElementById("toast"); document.getElementById("toastMsg").textContent = msg; toastFn = fn; t.hidden = false;
+        clearTimeout(toastT); toastT = setTimeout(function(){ t.hidden = true; toastFn = null; }, 7000);
+      }
+      function hideToast(){ document.getElementById("toast").hidden = true; toastFn = null; }
+      function refreshAfter(k){ saveCache(); renderAll(); observeLabels(); markSelected(); showDetail(k || key(selected)); syncTitle(); }
+      function restoreEvent(snap){
+        if (snap.local){ events.push(snap); saveLocal(); refreshAfter(); return; }
+        if (!accessToken){ setSync("err", "元に戻すには再接続してください"); return; }
+        var body = { summary: snap.title === "（無題）" ? "" : snap.title, location: snap.location || "", description: snap.description || "" };
+        if (snap.allDay){ body.start = { date: snap.startKey }; body.end = { date: snap.endKeyExcl }; }
+        else { var tb = timedBody(snap.startKey, addDays(snap.endKeyExcl, -1), snap.startTime, snap.endTime); body.start = tb.start; body.end = tb.end; }
+        setSync("busy", "元に戻し中…");
+        apiFetch("/calendars/" + encodeURIComponent(snap.calendarId) + "/events", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) })
+        .then(function(item){ applyItem(item, snap.calendarId, null); })
+        .catch(function(e){ setSync("err", "元に戻せませんでした: " + e.message); });
+      }
+      function moveEvent(uid, newKey, noUndo){
         var ev = findEvent(uid); if (!ev) return;
-        if (ev.local){ shiftLocalEvent(ev, newKey, false); return; }
-        if (!accessToken) return;
+        var oldKey = ev.startKey, undo = function(){ moveEvent(uid, oldKey, true); };
+        if (ev.local){ shiftLocalEvent(ev, newKey, false); if (!noUndo) showUndo("予定を移動しました", undo); return; }
+        if (!accessToken){ setSync("err", "移動するには再接続してください"); return; }
         var delta = Math.round((parseKey(newKey) - parseKey(ev.startKey)) / 86400000);
         if (!delta) return;
         var body = {};
         if (ev.allDay){
-          body.start = { date: newKey };
-          var endD = parseKey(ev.endKeyExcl); endD.setDate(endD.getDate()+delta);
-          body.end = { date: key(endD) };
+          body.start = { date: newKey }; body.end = { date: addDays(ev.endKeyExcl, delta) };
         } else {
-          var lastDay = parseKey(ev.endKeyExcl); lastDay.setDate(lastDay.getDate()-1+delta);
-          body.start = { dateTime: newKey + "T" + ev.startTime + ":00" };
-          body.end = { dateTime: key(lastDay) + "T" + ev.endTime + ":00" };
+          var tb = timedBody(newKey, addDays(ev.endKeyExcl, delta - 1), ev.startTime, ev.endTime); body.start = tb.start; body.end = tb.end;
         }
+        var orig = ev, moved = Object.assign({}, ev);
+        moved.startKey = newKey; moved.endKeyExcl = addDays(ev.endKeyExcl, delta); moved.startDateObj = parseKey(newKey);
+        events = events.map(function(x){ return x === orig ? moved : x; });
+        selected = parseKey(newKey); refreshAfter(newKey);
+        if (!noUndo) showUndo("予定を移動しました", undo);
         setSync("busy", "予定を移動中…");
         apiFetch("/calendars/" + encodeURIComponent(ev.calendarId) + "/events/" + encodeURIComponent(ev.id),
           { method:"PATCH", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) })
-        .then(function(){ selected = parseKey(newKey); syncAll(); })
-        .catch(function(e){ setSync("err", "移動できませんでした: " + e.message); });
+        .then(function(item){ applyItem(item, orig.calendarId, orig.uid); })
+        .catch(function(e){
+          events = events.map(function(x){ return x === moved ? orig : x; }); hideToast(); refreshAfter();
+          setSync("err", "移動できませんでした: " + (e.message === "auth" ? "再接続してください" : e.message));
+        });
       }
       function copyEvent(uid, newKey){
         var ev = findEvent(uid); if (!ev) return;
@@ -1197,13 +1336,12 @@
           body.end = { date: key(endD) };
         } else {
           var lastDay = parseKey(ev.endKeyExcl); lastDay.setDate(lastDay.getDate() - 1 + delta);
-          body.start = { dateTime: newKey + "T" + ev.startTime + ":00" };
-          body.end = { dateTime: key(lastDay) + "T" + ev.endTime + ":00" };
+          var tb = timedBody(newKey, key(lastDay), ev.startTime, ev.endTime); body.start = tb.start; body.end = tb.end;
         }
         setSync("busy", "予定をコピー中…");
         apiFetch("/calendars/" + encodeURIComponent(ev.calendarId) + "/events",
           { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) })
-        .then(function(){ selected = parseKey(newKey); syncAll(); })
+        .then(function(item){ selected = parseKey(newKey); applyItem(item, ev.calendarId, null); })
         .catch(function(e){ setSync("err", "コピーできませんでした: " + e.message); });
       }
 
@@ -1221,7 +1359,7 @@
           cb.type = "checkbox"; cb.checked = !hiddenCals[cal.id];
           cb.setAttribute("aria-label", cal.summary + " を表示");
           cb.addEventListener("change", function(){
-            hiddenCals[cal.id] = !cb.checked;
+            hiddenCals[cal.id] = !cb.checked; saveCache();
             renderAll(); observeLabels(); markSelected(); showDetail(key(selected));
           });
           lab.appendChild(cb);
@@ -1275,12 +1413,10 @@
           o.value = c.id; o.textContent = c.summary;
           sel.appendChild(o);
         });
-        if (!sel.options.length){
-          var lo = document.createElement("option");
-          lo.value = "__local"; lo.textContent = "サンプル（この端末のみ）";
-          sel.appendChild(lo);
-        }
-        if (cur && sel.querySelector('option[value="' + CSS.escape(cur) + '"]')) sel.value = cur;
+        var lo = document.createElement("option");
+        lo.value = "__local"; lo.textContent = "この端末のみ（Googleには保存されません）";
+        sel.appendChild(lo);
+        if (cur && cur !== "__local" && sel.querySelector('option[value="' + CSS.escape(cur) + '"]')) sel.value = cur;
         else {
           var prim = calendars.filter(function(c){ return c.primary; })[0];
           if (prim && sel.querySelector('option[value="' + CSS.escape(prim.id) + '"]')) sel.value = prim.id;
@@ -1306,7 +1442,21 @@
         s.setDate(s.getDate() - ((s.getDay() - settings.weekStart + 7) % 7));
         return s;
       }
-      function cellHTML(d, inMonth, big){
+      function multiOf(e){ return addDays(e.endKeyExcl, -1) > e.startKey; }
+      function weekSlots(wKey){
+        var days = [], list = [], seen = {}, out = {}, slots = [];
+        for (var i = 0; i < 7; i++){ days.push(addDays(wKey, i)); out[days[i]] = []; }
+        days.forEach(function(k){ evsOn(k).forEach(function(e){ if (multiOf(e) && !seen[e.uid]){ seen[e.uid] = 1; list.push(e); } }); });
+        list.sort(function(a, b){ return a.startKey < b.startKey ? -1 : a.startKey > b.startKey ? 1 : (a.endKeyExcl < b.endKeyExcl ? 1 : -1); });
+        list.forEach(function(e){
+          var st = e.startKey < days[0] ? days[0] : e.startKey, l = addDays(e.endKeyExcl, -1); if (l > days[6]) l = days[6];
+          var si = 0; while (slots[si] !== undefined && slots[si] >= st) si++;
+          slots[si] = l;
+          days.forEach(function(k){ if (k >= st && k <= l) out[k][si] = e; });
+        });
+        return { out: out, n: slots.length };
+      }
+      function cellHTML(d, inMonth, big, ms){
         var k = key(d), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var cls = "cell " + dowClass(d) + (inMonth ? "" : " dim") + (hol ? " is-hol" : "")
           + (k===key(TODAY) ? " is-today" : "") + (k===key(selected) ? " is-sel" : "");
@@ -1314,20 +1464,31 @@
           + '<span class="dnum">'+d.getDate()+'</span>';
         if (hol) h += '<span class="hol">'+hol+'</span>';
         if (rok && (big || !hol)) h += '<span class="rok'+(rok==="大安"?" good":"")+'">'+rok+'</span>';
-        var max = big ? 3 : 2;
-        evs.slice(0,max).forEach(function(e){
-          h += '<span class="ev" data-ev="'+esc(e.uid)+'" style="background:'+e.color+'">'+esc(e.title)+'</span>';
+        var max = big ? 3 : 2, singles = evs;
+        if (ms && ms.n){
+          singles = evs.filter(function(e){ return !multiOf(e); });
+          for (var si = 0; si < ms.n; si++){
+            var me = ms.arr[si];
+            if (!me){ h += '<span class="ev ph">&nbsp;</span>'; continue; }
+            var ml = addDays(me.endKeyExcl, -1), mfirst = k === me.startKey || d.getDay() === settings.weekStart;
+            h += '<span class="ev ms' + (k > me.startKey ? " c-l" : "") + (ml > k ? " c-r" : "") + '" data-ev="' + esc(me.uid) + '" style="background:' + me.color + ';color:' + fg(me.color) + '">' + (mfirst ? esc(me.title) : "&nbsp;") + '</span>';
+          }
+          max = Math.max(0, max - ms.n);
+        }
+        singles.slice(0, max).forEach(function(e){
+          h += '<span class="ev" data-ev="'+esc(e.uid)+'" style="background:'+e.color+';color:'+fg(e.color)+'">'+esc(e.title)+'</span>';
         });
-        if (evs.length > max) h += '<span class="ev more">他 '+(evs.length-max)+' 件</span>';
+        if (singles.length > max) h += '<span class="ev more">他 '+(singles.length-max)+' 件</span>';
         return h + "</div>";
       }
       function monthGridHTML(year, month, big){
         var first = new Date(year, month, 1);
         var start = new Date(year, month, 1 - ((first.getDay() - settings.weekStart + 7) % 7));
-        var h = '<div class="grid'+(big?" std-grid":"")+'">';
+        var ws = null, h = '<div class="grid'+(big?" std-grid":"")+'">';
         for (var i=0;i<42;i++){
           var d = new Date(start.getFullYear(), start.getMonth(), start.getDate()+i);
-          h += cellHTML(d, d.getMonth()===month, big);
+          if (i % 7 === 0) ws = weekSlots(key(d));
+          h += cellHTML(d, d.getMonth()===month, big, big ? { arr: ws.out[key(d)], n: ws.n } : null);
         }
         return h + "</div>";
       }
@@ -1400,24 +1561,57 @@
           + '<b>'+(s.getMonth()+1)+'/'+s.getDate()+' – '+(e.getMonth()+1)+'/'+e.getDate()+'</b>'
           + '<button class="hbtn" data-wkshift="1" aria-label="次の週"><svg viewBox="0 0 24 24"><path d="M9.5 5.5L16 12l-6.5 6.5"/></svg></button></div>';
       }
+      var HW = 36, weekSeen = "";
+      function layoutTimed(k, tm){
+        var items = tm.map(function(e){
+          var last = addDays(e.endKeyExcl, -1), s0 = e.startKey < k ? 0 : toMin(e.startTime), en = last > k ? 1440 : toMin(e.endTime);
+          if (en <= s0) en = e.endTime === "00:00" ? 1440 : s0 + 30;
+          if (en - s0 < 30) en = Math.min(1440, s0 + 30);
+          return { e: e, s: s0, en: en, c: 0, n: 1 };
+        }).sort(function(a, b){ return a.s - b.s || b.en - a.en; });
+        var cur = [], cend = 0, groups = [];
+        items.forEach(function(it){
+          if (cur.length && it.s >= cend){ groups.push(cur); cur = []; cend = 0; }
+          var c = 0; while (cur.some(function(o){ return o.c === c && o.en > it.s; })) c++;
+          it.c = c; cur.push(it); cend = Math.max(cend, it.en);
+        });
+        if (cur.length) groups.push(cur);
+        groups.forEach(function(g){ var n = Math.max.apply(null, g.map(function(o){ return o.c; })) + 1; g.forEach(function(o){ o.n = n; }); });
+        return items;
+      }
       function renderWeek(){
-        var s = weekStartOf(selected), h = wkNavHTML(s) + '<div class="week-head">';
-        for (var i=0;i<7;i++){
+        var s = weekStartOf(selected), h = wkNavHTML(s) + '<div class="week-head wg">', first = 1440, tcols = "", allRow = "";
+        for (var i = 0; i < 7; i++){
           var d = new Date(s.getFullYear(), s.getMonth(), s.getDate()+i), k = key(d);
           h += '<div class="wh '+dowClass(d)+(holOf(k)?" is-hol":"")+(k===key(TODAY)?" is-today":"")+(k===key(selected)?" is-sel":"")+'" data-date="'+k+'" role="button"><span>'+DOW[d.getDay()]+'</span><b>'+d.getDate()+'</b></div>';
         }
-        h += '</div><div class="week-cols">';
-        for (var j=0;j<7;j++){
-          var dd = new Date(s.getFullYear(), s.getMonth(), s.getDate()+j), kk = key(dd);
-          h += '<div class="wcol" data-date="'+kk+'" role="button">';
-          if (holOf(kk)) h += '<div class="w-ev" style="background:var(--sun)">'+holOf(kk)+'</div>';
-          evsOn(kk).forEach(function(e){
-            h += '<div class="w-ev" data-ev="'+esc(e.uid)+'" style="background:'+e.color+'"><time>'+e.timeLabel+'</time>'+esc(e.title)+'</div>';
+        for (var j = 0; j < 7; j++){
+          var kk = key(new Date(s.getFullYear(), s.getMonth(), s.getDate()+j)), evs = evsOn(kk), tm = [];
+          allRow += '<div class="wcol wall" data-date="'+kk+'" role="button">';
+          if (holOf(kk)) allRow += '<div class="w-ev" style="background:var(--sun);color:#fff">'+holOf(kk)+'</div>';
+          evs.forEach(function(e){
+            if (!e.allDay){ tm.push(e); return; }
+            allRow += '<div class="w-ev" data-ev="'+esc(e.uid)+'" style="background:'+e.color+';color:'+fg(e.color)+'">'+esc(e.title)+'</div>';
           });
-          h += "</div>";
+          allRow += '</div>';
+          var its = layoutTimed(kk, tm);
+          if (its.length) first = Math.min(first, its[0].s);
+          tcols += '<div class="wcol wt" data-date="'+kk+'" role="button">';
+          its.forEach(function(o){
+            var e = o.e;
+            tcols += '<div class="w-ev" data-ev="'+esc(e.uid)+'" style="top:'+(o.s*HW/60)+'px;height:'+Math.max(16,(o.en-o.s)*HW/60-1)+'px;left:calc(100% * '+o.c+' / '+o.n+');width:calc(100% / '+o.n+' - 1px);background:'+e.color+';color:'+fg(e.color)+'"><time>'+(e.startKey < kk ? "" : e.startTime)+'</time>'+esc(e.title)+'</div>';
+          });
+          tcols += '</div>';
         }
-        document.getElementById("view-week").innerHTML = h + "</div>";
+        h += '</div><div class="week-cols wk-all">' + allRow + '</div><div class="wk-grid" style="height:' + 24*HW + 'px">';
+        for (var hr = 0; hr < 24; hr++) h += '<div class="tg-h" style="top:' + hr*HW + 'px"><span>' + hr + ':00</span></div>';
+        var nw = new Date();
+        h += '<div class="wk-tcols">' + tcols + '</div>';
+        if (weekStartKeyHas(s, key(TODAY))) h += '<div class="tg-now" style="left:34px;top:' + ((nw.getHours()*60+nw.getMinutes())*HW/60) + 'px"></div>';
+        document.getElementById("view-week").innerHTML = h + '</div>';
+        if (currentView === "week" && weekSeen !== key(s)){ weekSeen = key(s); stage.scrollTop = Math.max(0, ((first === 1440 ? 480 : first) / 60 - 1) * HW); }
       }
+      function weekStartKeyHas(s, k){ var e = addDays(key(s), 7); return k >= key(s) && k < e; }
       function wkCardHTML(d, wdW, weW){
         var k = key(d), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var weekend = d.getDay()===0 || d.getDay()===6;
@@ -1428,7 +1622,7 @@
           + (rok ? '<span class="wk-rok">'+rok+'</span>' : '') + '</div><div class="wk-evs">';
         if (!evs.length) h += '<div class="wk-none">予定なし</div>';
         evs.slice(0,6).forEach(function(e){
-          h += '<div class="wk-ev" data-ev="'+esc(e.uid)+'" style="background:'+e.color+'">' + (e.allDay ? "" : "<time>"+e.startTime+"</time>") + esc(e.title) + "</div>";
+          h += '<div class="wk-ev" data-ev="'+esc(e.uid)+'" style="background:'+e.color+';color:'+fg(e.color)+'">' + (e.allDay ? "" : "<time>"+e.startTime+"</time>") + esc(e.title) + "</div>";
         });
         if (evs.length > 6) h += '<div class="wk-more">他 '+(evs.length-6)+' 件</div>';
         return h + "</div></div>";
@@ -1449,27 +1643,65 @@
         renderWeekCard("weekB", 1.0, 1.7);
         renderWeekCard("weekC", 1.0, 1.0);
       }
+      var daySeen = "", HH = 44;
       function renderDay(){
         var k = key(selected), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var h = '<div class="day-hero"><div class="big">'+selected.getDate()+'</div>'
           + '<div class="dow '+dowClass(selected)+'">'+selected.getFullYear()+'年'+(selected.getMonth()+1)+'月 '+DOW[selected.getDay()]+'曜日'
           + (hol ? ' ・ <span style="color:var(--sun)">'+hol+'</span>' : '') + (rok ? ' ・ '+rok : '') + (k===key(TODAY) ? ' ・ 今日' : '') + '</div></div><div class="timeline">';
         if (!evs.length) h += '<div class="tl-row"><time></time><div class="tl-none">この日の予定はありません</div></div>';
+        var tm = [];
         evs.forEach(function(e){
-          h += '<div class="tl-row"><time>'+(e.allDay?"終日":e.startTime)+'</time>'
-             + '<div class="tl-ev" style="background:'+e.color+'" data-ev="'+esc(e.uid)+'">'+esc(e.title)+'<small>'+e.timeLabel
-             + (e.location ? ' ・ ' + esc(e.location) : '') + '</small></div></div>';
+          if (!e.allDay){ tm.push(e); return; }
+          h += '<div class="tl-row"><time>終日</time><div class="tl-ev" style="background:'+e.color+';color:'+fg(e.color)+'" data-ev="'+esc(e.uid)+'">'+esc(e.title)
+             + (e.location ? '<small>'+esc(e.location)+'</small>' : '') + '</div></div>';
         });
-        document.getElementById("view-day").innerHTML = h + "</div>";
+        h += '</div>';
+        var first = 480;
+        if (tm.length){
+          var items = tm.map(function(e){
+            var last = addDays(e.endKeyExcl, -1), s0 = e.startKey < k ? 0 : toMin(e.startTime), en = last > k ? 1440 : toMin(e.endTime);
+            if (en <= s0) en = e.endTime === "00:00" ? 1440 : s0 + 30;
+            if (en - s0 < 30) en = Math.min(1440, s0 + 30);
+            return { e: e, s: s0, en: en, c: 0, n: 1 };
+          }).sort(function(a, b){ return a.s - b.s || b.en - a.en; });
+          first = items[0].s;
+          var cur = [], cend = 0, groups = [];
+          items.forEach(function(it){
+            if (cur.length && it.s >= cend){ groups.push(cur); cur = []; cend = 0; }
+            var c = 0; while (cur.some(function(o){ return o.c === c && o.en > it.s; })) c++;
+            it.c = c; cur.push(it); cend = Math.max(cend, it.en);
+          });
+          if (cur.length) groups.push(cur);
+          groups.forEach(function(g){ var n = Math.max.apply(null, g.map(function(o){ return o.c; })) + 1; g.forEach(function(o){ o.n = n; }); });
+          h += '<div class="tg" style="height:' + 24 * HH + 'px">';
+          for (var i = 0; i < 24; i++) h += '<div class="tg-h" style="top:' + i * HH + 'px"><span>' + i + ':00</span></div>';
+          items.forEach(function(o){
+            var e = o.e;
+            h += '<div class="tg-ev" data-ev="'+esc(e.uid)+'" style="top:'+(o.s*HH/60)+'px;height:'+Math.max(18,(o.en-o.s)*HH/60-1)+'px;left:calc(44px + (100% - 44px) * '+o.c+' / '+o.n
+               + ');width:calc((100% - 44px) / '+o.n+' - 2px);background:'+e.color+';color:'+fg(e.color)+'"><b>'+esc(e.title)+'</b><br><span>'+e.timeLabel+(e.location ? ' ・ '+esc(e.location) : '')+'</span></div>';
+          });
+          if (k === key(TODAY)){ var nw = new Date(); h += '<div class="tg-now" style="top:'+((nw.getHours()*60+nw.getMinutes())*HH/60)+'px"></div>'; }
+          h += '</div>';
+        }
+        document.getElementById("view-day").innerHTML = h;
+        if (currentView === "day" && daySeen !== k){ daySeen = k; stage.scrollTop = Math.max(0, (first / 60 - 1) * HH); }
       }
       function renderList(filter){
-        var h = '<div class="searchbar"><input id="listSearch" type="search" placeholder="予定を検索" value="'+esc(filter||"")+'"></div>';
-        var sorted = events.filter(isVisible).slice().sort(function(a,b){ return a.startKey < b.startKey ? -1 : 1; });
+        var host = document.getElementById("view-list"), inp = document.getElementById("listSearch");
+        if (!inp){
+          host.innerHTML = '<div class="searchbar"><input id="listSearch" type="search" placeholder="予定を検索" enterkeyhint="search" autocomplete="off"></div><div id="listResults"></div>';
+          inp = document.getElementById("listSearch");
+          if (filter) inp.value = filter;
+          inp.addEventListener("input", function(){ renderList(inp.value); });
+        }
+        var q = inp.value.trim().toLowerCase(), h = "";
+        var sorted = events.filter(isVisible).slice().sort(function(a,b){ return a.startKey < b.startKey ? -1 : a.startKey > b.startKey ? 1 : cmpEv(a,b); });
         var fromKey = key(new Date(TODAY.getFullYear(), TODAY.getMonth()-1, 1));
         var lastMonth = "", shown = 0, total = 0;
         sorted.forEach(function(e){
-          if (filter){
-            if (e.title.indexOf(filter) === -1 && (e.location||"").indexOf(filter) === -1) return;
+          if (q){
+            if ((e.title + " " + (e.location||"") + " " + (e.description||"")).toLowerCase().indexOf(q) === -1) return;
           } else if (e.startKey < fromKey) return;
           total++;
           if (shown >= 600) return;
@@ -1481,11 +1713,9 @@
         });
         if (!shown) h += '<div style="padding:14px;font-size:12.5px;color:var(--ink-3)">該当する予定がありません</div>';
         if (total > shown) h += '<div class="list-note">' + total + '件中 ' + shown + '件までを表示しています</div>';
-        document.getElementById("view-list").innerHTML = h;
-        var inp = document.getElementById("listSearch");
-        inp.addEventListener("input", function(){ var v = inp.value; renderList(v); var n = document.getElementById("listSearch"); n.focus(); n.setSelectionRange(n.value.length, n.value.length); });
+        document.getElementById("listResults").innerHTML = h;
       }
-      function renderAll(){ renderVGrid(); renderVList(); renderMonth(); renderWeek(); renderWeekCards(); renderDay(); renderList(""); }
+      function renderAll(){ idxDirty = true; renderVGrid(); renderVList(); renderMonth(); renderWeek(); renderWeekCards(); renderDay(); renderList(""); }
 
       /* ================= title sync ================= */
       function isWeekType(v){ return v==="week" || v==="weekA" || v==="weekB" || v==="weekC"; }
@@ -1510,11 +1740,8 @@
 
       /* ================= detail panel ================= */
       var detail = document.getElementById("detail"), detailIn = document.getElementById("detailIn");
-      /* The day-detail strip under the calendar is shown only in month/week
-         views, and only after the user has tapped a date there. */
-      var detailArmed = false;
-      function detailAllowed(){ return currentView === "vgrid" || currentView === "month" || isWeekType(currentView); }
       function showDetail(k){
+        if (!(detailArmed && (currentView === "month" || isWeekType(currentView)))){ detail.classList.remove("open"); return; }
         var d = parseKey(k), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var h = '<h3>'+(d.getMonth()+1)+'月'+d.getDate()+'日（'+DOW[d.getDay()]+'）'
           + (k===key(TODAY) ? '<small>今日</small>' : '') + (hol ? '<span class="hol-name">'+hol+'</span>' : '') + (rok ? '<span class="rok-name">'+rok+'</span>' : '') + '</h3>';
@@ -1525,7 +1752,7 @@
         });
         h += '<button class="d-add" id="dAdd">＋ この日に予定を追加</button>';
         detailIn.innerHTML = h;
-        detail.classList.toggle("open", detailArmed && detailAllowed());
+        detail.classList.add("open");
         detailIn.querySelectorAll("[data-ev]").forEach(function(b){
           b.addEventListener("click", function(){ openEdit(b.getAttribute("data-ev")); });
         });
@@ -1552,8 +1779,7 @@
         if (evEl && currentView === "day"){ openEdit(evEl.getAttribute("data-ev")); return; }
         var t = e.target.closest("[data-date]");
         if (!t) return;
-        selected = parseKey(t.getAttribute("data-date"));
-        if (detailAllowed()) detailArmed = true;
+        selected = parseKey(t.getAttribute("data-date")); detailArmed = true;
         markSelected(); renderWeek(); renderWeekCards(); renderDay(); showDetail(key(selected)); syncTitle();
       });
 
@@ -1765,16 +1991,17 @@
       }
       function performDeleteEvent(uid){
         var ev = findEvent(uid); if (!ev) return;
-        if (ev.local){
-          events = events.filter(function(x){ return x.uid !== uid; });
-          renderAll(); observeLabels(); markSelected(); showDetail(key(selected));
-          return;
-        }
-        if (!accessToken) return;
+        var label = "「" + ev.title + "」を削除しました", undo = function(){ restoreEvent(ev); };
+        if (ev.local){ dropEvent(uid); showUndo(label, undo); return; }
+        if (!accessToken){ setSync("err", "削除するには再接続してください"); return; }
+        dropEvent(uid); showUndo(label, undo);
         setSync("busy", "予定を削除中…");
         apiFetch("/calendars/" + encodeURIComponent(ev.calendarId) + "/events/" + encodeURIComponent(ev.id), { method:"DELETE" })
-        .then(function(){ syncAll(); })
-        .catch(function(e){ setSync("err", "削除できませんでした: " + e.message); });
+        .then(function(){ setSync("on", "削除しました"); })
+        .catch(function(e){
+          events.push(ev); hideToast(); refreshAfter();
+          setSync("err", "削除できませんでした: " + (e.message === "auth" ? "再接続してください" : e.message));
+        });
       }
       var pendingDrop = null;
       function askDropAction(uid, fromKey, toKey){
@@ -1884,7 +2111,7 @@
       }
       function setView(id, force){
         if (!force && !viewEnabled(id)) id = settings.enabledViews[0] || "vgrid";
-        currentView = id;
+        currentView = id; detailArmed = false; daySeen = ""; weekSeen = "";
         settings.lastView = id; saveSettings();
         document.querySelectorAll(".tbtn").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-view") === id); });
         document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); });
@@ -1893,16 +2120,14 @@
         wdays.style.display = (id === "vgrid" || id === "month") ? "" : "none";
         stage.scrollTop = 0;
         if (id === "vgrid" || id === "vlist") scrollToToday(false);
-        syncTitle();
-        showDetail(key(selected));
+        syncTitle(); showDetail(key(selected));
       }
       document.getElementById("toolbar").addEventListener("click", function(e){
         var b = e.target.closest("[data-view]"); if (!b) return;
         setView(b.getAttribute("data-view"));
       });
-      function scrollToToday(smooth){
-        if (!accessToken){ stage.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" }); return; }
-        var sel = (currentView === "vgrid" ? "#view-vgrid " : "#view-vlist ") + '[data-date="' + key(TODAY) + '"]';
+      function scrollToToday(smooth, k){
+        var sel = (currentView === "vgrid" ? "#view-vgrid " : "#view-vlist ") + '[data-date="' + (k || key(TODAY)) + '"]';
         var el = stage.querySelector(sel);
         if (el) stage.scrollTo({ top: el.offsetTop - 140, behavior: smooth ? "smooth" : "auto" });
       }
@@ -1932,14 +2157,14 @@
       document.querySelectorAll("[data-close]").forEach(function(b){ b.addEventListener("click", closePops); });
       document.addEventListener("keydown", function(e){ if (e.key === "Escape") closePops(); });
 
-      syncBtn.addEventListener("click", function(){ openPop("googlePop"); });
+      syncBtn.addEventListener("click", function(){ if (!accessToken && clientId) connectGoogle(); else { openPop("googlePop"); var cs = document.getElementById("calSection"); if (!cs.hidden) setTimeout(function(){ cs.scrollIntoView(); }, 60); } });
       resyncBtn.addEventListener("click", function(){ syncAll(); });
       document.getElementById("gConnectBtn").addEventListener("click", connectGoogle);
       document.getElementById("gDisconnectBtn").addEventListener("click", function(){
         if (accessToken && window.google && google.accounts.oauth2){
           google.accounts.oauth2.revoke(accessToken, function(){});
         }
-        accessToken = null; calendars = []; events = buildSampleEvents(); hiddenCals = {};
+        accessToken = null; calendars = []; events = buildSampleEvents().concat(events.filter(function(x){ return x.local && x.calendarId === "__local"; })); hiddenCals = {}; kvSet(CACHE_KEY, null);
         document.getElementById("calSection").hidden = true;
         document.getElementById("calColorBox").hidden = true;
         document.getElementById("gStatus").textContent = "接続を解除しました。";
@@ -1995,14 +2220,14 @@
       });
       document.getElementById("refillRow").addEventListener("click", function(e){
         var b = e.target.closest("[data-refill]"); if (!b) return;
-        var rk = b.getAttribute("data-refill");
+        var rkRaw = b.getAttribute("data-refill"), rk = resolveRefill(rkRaw);
         if (settings.themePreset === "custom"){
           settings.customTheme.paper = REFILLS[rk].sheet;
           settings.customTheme.ink = REFILLS[rk].ink;
           document.getElementById("ccPaper").value = REFILLS[rk].sheet;
           document.getElementById("ccInk").value = REFILLS[rk].ink;
         } else {
-          settings.refill = rk;
+          settings.refill = rkRaw;
         }
         saveSettings(); applyAppearance();
       });
@@ -2120,6 +2345,7 @@
       function fillFormDefaults(dateKey){
         document.getElementById("evMsg").textContent = "";
         document.getElementById("evDate").value = dateKey || key(selected);
+        document.getElementById("evEndDate").value = document.getElementById("evDate").value;
         document.getElementById("evTime").disabled = false;
         document.getElementById("evEnd").disabled = false;
       }
@@ -2133,13 +2359,16 @@
         document.getElementById("evTime").value = "10:00";
         document.getElementById("evEnd").value = "11:00";
         document.getElementById("evDelBtn").hidden = true;
-        document.getElementById("evSaveBtn").textContent = accessToken ? "Googleカレンダーに保存" : "保存する（この端末のみ）";
+        updateSaveLabel();
         document.getElementById("evTitle").disabled = false;
+        ["evCal","evDate","evEndDate","evAllDay","evLoc","evDesc"].forEach(function(id){ document.getElementById(id).disabled = false; });
+        fillTitleList(); renderTpl();
+        document.getElementById("evSaveBtn").style.display = "";
         fillFormDefaults(dateKey);
-        openPop("evPop");
+        openPop("evPop"); prevEvDate = document.getElementById("evDate").value; syncDur();
         setTimeout(function(){ document.getElementById("evTitle").focus(); }, 240);
       }
-      function openEdit(uid){
+      function openEdit(uid){ document.getElementById("tplRow").hidden = true;
         var e = findEvent(uid); if (!e) return;
         editingUid = uid;
         document.getElementById("evPopTitle").textContent = e.writable ? "予定を編集" : "予定の詳細（閲覧のみ）";
@@ -2152,17 +2381,18 @@
         document.getElementById("evEnd").value = e.endTime || "11:00";
         document.getElementById("evDelBtn").hidden = !e.writable;
         var dis = !e.writable;
-        ["evTitle","evCal","evDate","evTime","evEnd","evAllDay","evLoc","evDesc"].forEach(function(id){
+        ["evTitle","evCal","evDate","evEndDate","evTime","evEnd","evAllDay","evLoc","evDesc"].forEach(function(id){
           document.getElementById(id).disabled = dis;
         });
         document.getElementById("evSaveBtn").style.display = dis ? "none" : "";
-        document.getElementById("evSaveBtn").textContent = accessToken ? "Googleカレンダーに保存" : "保存する（この端末のみ）";
+        updateSaveLabel();
         fillFormDefaults(e.startKey);
         document.getElementById("evDate").value = e.startKey;
+        document.getElementById("evEndDate").value = addDays(e.endKeyExcl, -1);
         document.getElementById("evDate").disabled = dis;
         document.getElementById("evTime").disabled = dis || e.allDay;
         document.getElementById("evEnd").disabled = dis || e.allDay;
-        openPop("evPop");
+        openPop("evPop"); prevEvDate = document.getElementById("evDate").value; syncDur();
       }
       document.getElementById("evAllDay").addEventListener("change", function(){
         var on = document.getElementById("evAllDay").checked;
@@ -2176,20 +2406,10 @@
       document.getElementById("evDelBtn").addEventListener("click", deleteEditing);
 
       /* ================= init ================= */
-      /* iOS standalone: viewport height at launch can be measured short and
-         percentage heights stick to it, leaving a gap under the toolbar.
-         Pin the app height to the real innerHeight and re-check after launch. */
-      function fitAppHeight(){
-        var a = document.getElementById("app");
-        if (a) a.style.height = window.innerHeight + "px";
-      }
-      fitAppHeight();
-      window.addEventListener("resize", fitAppHeight);
-      window.addEventListener("orientationchange", function(){ setTimeout(fitAppHeight, 250); });
-      setTimeout(fitAppHeight, 300);
-      setTimeout(fitAppHeight, 1000);
+      function boot(){
       loadSettings();
       clientId = settings.clientId || "";
+      var cachedAt = loadStored();
       document.getElementById("clientIdInput").value = clientId;
       applyAppearance();
       renderWdays();
@@ -2197,16 +2417,63 @@
       if (!viewEnabled(initialView)) initialView = settings.enabledViews[0] || "month";
       currentView = initialView;
       buildToolbar();
-      setSync("", "Googleカレンダー未接続");
+      if (cachedAt){
+        var cd = new Date(cachedAt);
+        setSync("", "保存データを表示中（最終同期 " + (cd.getMonth()+1) + "/" + cd.getDate() + " " + pad(cd.getHours()) + ":" + pad(cd.getMinutes()) + "）");
+        if (calendars.length){ renderCalList(); document.getElementById("calSection").hidden = false; }
+      } else setSync("", "Googleカレンダー未接続");
       renderConnectCard();
       renderCalOptions();
+      document.getElementById("evCal").addEventListener("change", updateSaveLabel);
+      document.getElementById("tplRow").addEventListener("click", tplClick);
+      document.getElementById("toastUndo").addEventListener("click", function(){ var f = toastFn; document.getElementById("toast").hidden = true; toastFn = null; if (f) f(); });
+      try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(){ if (settings.refill === "auto") applyAppearance(); }); } catch(e){}
+      document.getElementById("evTime").addEventListener("change", function(){
+        document.getElementById("evEnd").value = fmtMin(Math.min(toMin(this.value) + evDur, 1439));
+      });
+      document.getElementById("evEnd").addEventListener("change", syncDur);
+      document.getElementById("evDate").addEventListener("change", function(){
+        var ed = document.getElementById("evEndDate"), d = Math.round((parseKey(this.value) - parseKey(prevEvDate || this.value)) / 86400000);
+        if (ed.value) ed.value = addDays(ed.value, d);
+        if (!ed.value || ed.value < this.value) ed.value = this.value;
+        prevEvDate = this.value;
+      });
+      document.getElementById("evEndDate").addEventListener("change", function(){
+        if (this.value < document.getElementById("evDate").value) this.value = document.getElementById("evDate").value;
+      });
+      var jump = document.createElement("input");
+      jump.type = "date"; jump.setAttribute("aria-label", "日付へ移動");
+      jump.style.cssText = "position:fixed;left:0;top:0;opacity:0;pointer-events:none;width:1px;height:1px";
+      document.body.appendChild(jump);
+      ymTitle.style.cursor = "pointer";
+      ymTitle.addEventListener("click", function(){ jump.value = key(selected); try { jump.showPicker(); } catch(e){ jump.focus(); jump.click(); } });
+      jump.addEventListener("change", function(){
+        if (!jump.value) return;
+        selected = parseKey(jump.value); stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1);
+        renderAll(); observeLabels(); markSelected(); showDetail(key(selected)); syncTitle();
+        if (currentView === "vgrid" || currentView === "vlist") scrollToToday(true, jump.value);
+      });
+      stage.addEventListener("touchmove", function(e){ if (dragState && dragState.active) e.preventDefault(); }, { passive: false });
+      document.addEventListener("visibilitychange", function(){
+        if (document.hidden) return;
+        var nt = new Date(); nt.setHours(0,0,0,0);
+        if (key(nt) !== key(TODAY)){
+          TODAY = nt;
+          RANGE_START = new Date(TODAY.getFullYear(), TODAY.getMonth()-6, 1);
+          RANGE_END = new Date(RANGE_START.getFullYear(), RANGE_START.getMonth()+RANGE_MONTHS, 0);
+          selected = new Date(TODAY); stdCursor = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+          renderAll(); observeLabels(); markSelected(); showDetail(key(TODAY)); syncTitle();
+        }
+        if (accessToken && Date.now() - lastSync > 300000) syncAll();
+      });
       renderAll();
       observeLabels();
       setView(initialView);
       markSelected();
       showDetail(key(TODAY));
       syncTitle();
-      tryAutoConnect();
+      }
+      kvLoad().then(boot);
     </script>
   </body>
 </html>
