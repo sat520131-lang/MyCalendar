@@ -52,8 +52,8 @@
         background:linear-gradient(168deg, var(--theme) 0%, var(--theme-deep) 100%);
         display:flex; flex-direction:column;
         /* iPhone notch / Dynamic Island: keep the title bar below the camera area */
-        padding:calc(10px + env(safe-area-inset-top, 0px)) calc(10px + env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) calc(10px + env(safe-area-inset-left, 0px));
-        gap:8px;
+        padding:calc(8px + env(safe-area-inset-top, 0px)) calc(10px + env(safe-area-inset-right, 0px)) calc(2px + env(safe-area-inset-bottom, 0px) * 0.35) calc(10px + env(safe-area-inset-left, 0px));
+        gap:6px;
       }
       header{ padding-top:4px; }
       .cell, .wcol, .wk-card, .dayrow, .week-head .wh, .ev, .w-ev, .wk-ev, .l-ev{
@@ -89,18 +89,18 @@
 
       /* ---------- Google sync bar ---------- */
       .syncbar{
-        display:flex; align-items:center; gap:8px; padding:6px 12px;
+        display:flex; align-items:center; gap:6px; padding:1px 10px;
         border-bottom:1px solid var(--line-soft); background:var(--sheet-2);
-        font-size:11.5px; color:var(--ink-2);
+        font-size:10.5px; color:var(--ink-2); line-height:1.2;
       }
-      .syncbar .dot{ width:8px; height:8px; border-radius:50%; background:var(--ink-3); flex:none; }
+      .syncbar .dot{ width:6px; height:6px; border-radius:50%; background:var(--ink-3); flex:none; }
       .syncbar .dot.on{ background:#43b581; }
       .syncbar .dot.busy{ background:#e9bc3f; }
       .syncbar .dot.err{ background:var(--sun); }
       .syncbar .stext{ flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .syncbar button{
         appearance:none; border:1px solid var(--line); background:var(--sheet); color:var(--ink);
-        border-radius:999px; font-size:11.5px; font-weight:600; padding:4px 12px; min-height:32px; cursor:pointer; flex:none;
+        border-radius:999px; font-size:10.5px; font-weight:600; padding:0 10px; min-height:22px; cursor:pointer; flex:none;
       }
       .syncbar button.primary{ background:var(--theme); border-color:var(--theme); color:#fff; }
 
@@ -111,7 +111,7 @@
       .wdays span.sat{ color:var(--sat); }
 
       /* ---------- Scroll area & views ---------- */
-      .stage{ flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; position:relative; touch-action:pan-y; }
+      .stage{ flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; position:relative; touch-action:pan-y; }
       .view{ display:none; }
       .view.active{ display:block; }
       .view.fill.active{ display:flex; flex-direction:column; height:100%; }
@@ -144,10 +144,46 @@
       }
       .ev.more{ background:transparent; color:var(--ink-2); font-weight:400; padding:0 3px; }
       .ev.ph{ visibility:hidden; }
+      body::before{ content:""; position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top, 0px); background:var(--theme-deep); z-index:200; pointer-events:none; }
+      .cell .ev{ font-size:9.5px; padding:0 1px; letter-spacing:-.02em; }
+      .std-grid{ flex:1; min-height:0; grid-template-rows:repeat(6, minmax(0,1fr)); padding-bottom:4px; }
+      .wcol.is-sel{ background:color-mix(in srgb, var(--theme) 9%, transparent); }
+      .wk-sticky, .dy-sticky{ position:sticky; top:0; z-index:6; background:var(--sheet); }
+      .dy-sticky{ border-bottom:1px solid var(--line-soft); }
+      .wall .w-ev, .wt .w-ev{ white-space:nowrap; text-overflow:ellipsis; }
+      .wall .w-ev{ padding:2px 1px; font-size:10px; }
+      .wt .w-ev{ padding:2px 1px; font-size:10px; }
+      .wt .w-ev time{ font-size:9px; overflow:hidden; text-overflow:ellipsis; }
+      @keyframes slR{ from{ transform:translateX(38%); opacity:.2; } to{ transform:none; opacity:1; } }
+      @keyframes slL{ from{ transform:translateX(-38%); opacity:.2; } to{ transform:none; opacity:1; } }
+      .sl-r{ animation:slR .26s ease-out; } .sl-l{ animation:slL .26s ease-out; }
+      #evCal{ display:none; }
+      .cal-pick{ position:relative; }
+      .cal-pick i{ width:12px; height:12px; border-radius:4px; flex:none; }
+      .cp-cur, .cp-opt{ display:flex; align-items:center; gap:8px; width:100%; text-align:left; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:var(--sheet); font-size:15px; color:var(--ink); min-height:40px; }
+      .cp-cur em{ margin-left:auto; font-style:normal; color:var(--ink-3); }
+      .cp-list{ margin-top:4px; border:1px solid var(--line); border-radius:10px; overflow:hidden; max-height:200px; overflow-y:auto; }
+      .cp-list[hidden]{ display:none; }
+      .cp-opt{ border:0; border-top:1px solid var(--line-soft); border-radius:0; }
+      #evCal:disabled + .cal-pick{ pointer-events:none; opacity:.6; }
+      .set-cal{ display:flex; align-items:center; gap:10px; width:100%; padding:8px 2px; border:0; border-top:1px solid var(--line-soft); background:none; font-size:14px; color:var(--ink); text-align:left; }
+      .set-cal i{ width:16px; height:16px; border-radius:5px; flex:none; }
+      .set-cal span{ flex:1; } .set-cal em{ font-style:normal; font-size:11px; color:var(--ink-2); }
+      .searchpanel{ position:absolute; inset:0; background:var(--sheet); z-index:40; display:flex; flex-direction:column; }
+      .searchpanel[hidden]{ display:none; }
+      .sp-bar{ display:flex; gap:8px; align-items:center; padding:10px; border-bottom:1px solid var(--line-soft); }
+      .sp-bar input{ flex:1; font-size:16px; padding:6px 12px; border:1px solid var(--line); border-radius:10px; background:var(--sheet-2); color:var(--ink); }
+      .sp-bar button{ border:0; background:none; color:var(--accent-text); font-size:14px; font-weight:600; }
+      .sp-res{ flex:1; overflow-y:auto; }
+      .sp-row{ display:flex; align-items:center; gap:8px; width:100%; padding:10px 14px; border:0; border-top:1px solid var(--line-soft); background:none; text-align:left; font-size:14px; color:var(--ink); }
+      .sp-row i{ width:9px; height:9px; border-radius:3px; flex:none; }
+      .sp-d{ font-size:12px; color:var(--ink-2); flex:none; }
+      .sp-t{ flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .sp-note{ padding:14px; font-size:12.5px; color:var(--ink-3); }
       .ev.ms.c-l{ margin-left:-3px; border-top-left-radius:0; border-bottom-left-radius:0; }
       .ev.ms.c-r{ margin-right:-3px; border-top-right-radius:0; border-bottom-right-radius:0; }
-      .week-head.wg{ padding-left:34px; }
-      .week-cols.wk-all{ padding:6px 6px 4px 34px; }
+      .week-head.wg{ padding-left:40px; }
+      .week-cols.wk-all{ padding:6px 6px 4px 40px; }
       .wcol.wall{ min-height:26px; }
       .wk-grid{ position:relative; margin:0 6px; }
       .wk-grid .tg-h span{ width:28px; font-size:10px; }
@@ -202,7 +238,7 @@
       .std-nav{ display:flex; align-items:center; justify-content:space-between; padding:8px 10px 2px; }
       .std-nav b{ font-size:16px; }
       .std-nav button{ min-width:40px; }
-      .std-grid .cell{ min-height:78px; }
+      .std-grid .cell{ min-height:0; }
 
       /* week view */
       .week-head{ display:grid; grid-template-columns:repeat(7,1fr); padding:8px 6px 6px; border-bottom:1px solid var(--line); }
@@ -293,7 +329,6 @@
       .toolbar{
         background:var(--bar-bg); border-radius:12px; padding:5px 4px;
         display:grid; grid-template-columns:repeat(6,1fr);
-        backdrop-filter:blur(4px);
       }
       .tbtn{
         appearance:none; border:0; background:transparent; cursor:pointer; color:rgba(255,255,255,.75);
@@ -448,7 +483,7 @@
           <div id="connectCardSlot"></div>
           <section class="view active" id="view-vgrid"></section>
           <section class="view" id="view-vlist"></section>
-          <section class="view" id="view-month"></section>
+          <section class="view fill" id="view-month"></section>
           <section class="view" id="view-week"></section>
           <section class="view fill" id="view-weekA"></section>
           <section class="view fill" id="view-weekB"></section>
@@ -457,6 +492,7 @@
           <section class="view" id="view-list"></section>
         </div>
 
+        <div class="searchpanel" id="searchPanel" hidden><div class="sp-bar"><input id="spInput" type="search" placeholder="予定を検索" enterkeyhint="search" autocomplete="off"><button type="button" id="spClose">閉じる</button></div><div class="sp-res" id="spResults"></div></div>
         <div class="detail" id="detail"><div class="detail-in" id="detailIn"></div></div>
       </div>
 
@@ -485,11 +521,6 @@
       <div id="calSection" hidden>
         <h4>表示するカレンダーと色</h4>
         <div class="cal-list" id="calList"></div>
-        <div id="calColorBox" hidden>
-          <h4 id="calColorTitle">カレンダーの色</h4>
-          <div class="pal-row" id="calColorPal"></div>
-          <div class="pal-note">四角いチップはGoogleカレンダー側の色です。色はこのアプリ内の表示にだけ使われます。</div>
-        </div>
         <button class="g-disconnect" id="gDisconnectBtn">接続を解除する</button>
       </div>
       <h4>ホーム画面に追加</h4>
@@ -529,22 +560,30 @@
       <label class="set-check"><input type="checkbox" id="showHolidaysChk" /><span class="grow">祝日を表示する</span></label>
       <label class="set-check"><input type="checkbox" id="showRokuyoChk" /><span class="grow">六曜を表示する</span></label>
 
+      <h4>カレンダーの色（この端末の表示だけ）</h4>
+      <div class="cal-list" id="setCalList"></div>
+      <div id="calColorBox" hidden>
+        <h4 id="calColorTitle">カレンダーの色</h4>
+        <div class="pal-row" id="calColorPal"></div>
+        <div class="pal-note">四角いチップはGoogleカレンダー側の色です。色はこのアプリ内の表示にだけ使われ、Googleカレンダーは変わりません。</div>
+      </div>
+
       <h4>同期する期間</h4>
       <div class="set-row" style="border-top:0">
         <span class="set-label">Googleから読み込む範囲<small>全期間に固定されています</small></span>
         <span style="font-size:13px;font-weight:600;flex:none">全期間</span>
       </div>
 
-      <h4>ツールバーに表示するビュー</h4>
+      <h4>ツールバーに表示するビュー（最大5つ）</h4>
       <div id="viewToggleList"></div>
 
       <h4>ジェスチャー</h4>
       <label class="set-check"><input type="checkbox" id="gestDragChk" /><span class="grow">予定を長押しドラッグして移動・コピー</span></label>
-      <label class="set-check"><input type="checkbox" id="gestLongChk" /><span class="grow">日を長押しして予定を追加</span></label>
-      <label class="set-check"><input type="checkbox" id="gestDblChk" /><span class="grow">ダブルタップで日表示に切り替え（リストでは予定をダブルタップで編集）</span></label>
-      <label class="set-check"><input type="checkbox" id="gestSwipeDelChk" /><span class="grow">リストで予定を横スワイプして削除</span></label>
+      <label style="display:none" class="set-check"><input type="checkbox" id="gestLongChk" /><span class="grow">日を長押しして予定を追加</span></label>
+      <label class="set-check"><input type="checkbox" id="gestDblChk" /><span class="grow">日をダブルタップで予定を追加</span></label>
+      <label style="display:none" class="set-check"><input type="checkbox" id="gestSwipeDelChk" /><span class="grow">リストで予定を横スワイプして削除</span></label>
       <label class="set-check"><input type="checkbox" id="gestSwipeNavChk" /><span class="grow">左右スワイプで前後の期間へ（月：前月・翌月／週：前週・翌週）</span></label>
-      <label class="set-check"><input type="checkbox" id="gestTwoFingerChk" /><span class="grow">2本指スワイプでビューを切り替え（左へ：次のビュー／右へ：前のビュー）</span></label>
+      <label style="display:none" class="set-check"><input type="checkbox" id="gestTwoFingerChk" /><span class="grow">2本指スワイプでビューを切り替え（左へ：次のビュー／右へ：前のビュー）</span></label>
 
       <h4>カレンダーごとの色</h4>
       <p class="home-note" style="margin-top:2px">予定の色はStaccal 2風パレットから自動で割り当てられます。変えたいときは「Google連携・カレンダーの色」からカレンダーごとに選べます。</p>
@@ -559,9 +598,8 @@
       <form class="ev-form" id="evForm">
         <label for="evTitle">タイトル</label>
         <input id="evTitle" type="text" placeholder="例：打ち合わせ" autocomplete="off" list="titleList" /><datalist id="titleList"></datalist>
-        <div class="tpl-row" id="tplRow" hidden></div>
         <label for="evCal">カレンダー</label>
-        <select id="evCal"></select>
+        <select id="evCal"></select><div class="cal-pick" id="calPick"></div>
         <div class="form-row">
           <div><label for="evDate">開始日</label><input id="evDate" type="date" /></div>
           <div><label for="evEndDate">終了日</label><input id="evEndDate" type="date" /></div>
@@ -744,14 +782,14 @@
             } else settings[k] = s[k];
           });
         } catch(e){}
-        settings.enabledViews = settings.enabledViews.filter(function(id){ return !!VIEW_DEF_MAP[id]; });
+        settings.enabledViews = settings.enabledViews.filter(function(id){ return !!VIEW_DEF_MAP[id]; }).slice(0, 5);
         if (!settings.enabledViews.length) settings.enabledViews = ["month"];
         if (!VIEW_DEF_MAP[settings.lastView]) settings.lastView = "month";
         /* startup view is fixed to the last-used view */
         settings.startupView = "last";
         /* sync range is fixed to the full period */
         settings.syncRange = "all";
-        if (settings.gestures.longpress === undefined) settings.gestures.longpress = true;
+        settings.gestures.longpress = false; settings.gestures.swipeDelete = false; settings.gestures.twoFingerSwipe = false;
         /* week start is a two-way choice: Monday or Sunday */
         if (settings.weekStart !== 0 && settings.weekStart !== 1) settings.weekStart = 1;
       }
@@ -1011,29 +1049,6 @@
       function fmtMin(m){ return pad(Math.floor(m / 60)) + ":" + pad(m % 60); }
       var evDur = 60, prevEvDate = "", detailArmed = false;
       function syncDur(){ var d = toMin(document.getElementById("evEnd").value) - toMin(document.getElementById("evTime").value); evDur = d > 0 ? d : 60; }
-      function renderTpl(){
-        var row = document.getElementById("tplRow"), list = settings.templates || [];
-        row.hidden = false;
-        row.innerHTML = list.map(function(t, i){ return '<span class="tpl" data-i="' + i + '">' + esc(t.title) + '<b data-del="' + i + '">×</b></span>'; }).join("")
-          + '<button type="button" class="tpl-save" id="tplSave">＋ 今の内容を登録</button>';
-      }
-      function tplClick(e){
-        var list = settings.templates || [], del = e.target.closest("[data-del]"), chip = e.target.closest(".tpl");
-        if (e.target.id === "tplSave"){
-          var title = document.getElementById("evTitle").value.trim(); if (!title) return;
-          var t = { title: title, loc: document.getElementById("evLoc").value.trim(), allDay: document.getElementById("evAllDay").checked,
-                    st: document.getElementById("evTime").value, en: document.getElementById("evEnd").value };
-          list = list.filter(function(x){ return x.title !== title; }); list.unshift(t);
-          settings.templates = list.slice(0, 8); saveSettings(); renderTpl(); return;
-        }
-        if (del){ list.splice(+del.getAttribute("data-del"), 1); settings.templates = list; saveSettings(); renderTpl(); return; }
-        if (!chip) return;
-        var t2 = list[+chip.getAttribute("data-i")]; if (!t2) return;
-        document.getElementById("evTitle").value = t2.title; document.getElementById("evLoc").value = t2.loc || "";
-        var ad = document.getElementById("evAllDay"); ad.checked = !!t2.allDay; ad.dispatchEvent(new Event("change"));
-        if (t2.st) document.getElementById("evTime").value = t2.st; if (t2.en) document.getElementById("evEnd").value = t2.en;
-        syncDur();
-      }
       function fillTitleList(){
         var seen = {}, out = [];
         events.slice().sort(function(a, b){ return a.startKey < b.startKey ? 1 : -1; }).forEach(function(e){
@@ -1187,6 +1202,13 @@
           body.start = tb.start; body.end = tb.end;
         }
         return body;
+      }
+      function renderCalPick(){
+        var sel = document.getElementById("evCal"), box = document.getElementById("calPick"), cur = sel.options[sel.selectedIndex];
+        function col(v){ var c = calendars.filter(function(x){ return x.id === v; })[0]; return c ? c.color : "#9aa0a6"; }
+        var h = '<button type="button" class="cp-cur"><i style="background:' + col(sel.value) + '"></i><span>' + esc(cur ? cur.textContent : "") + '</span><em>▾</em></button><div class="cp-list" hidden>';
+        Array.prototype.forEach.call(sel.options, function(o){ h += '<button type="button" class="cp-opt" data-v="' + esc(o.value) + '"><i style="background:' + col(o.value) + '"></i><span>' + esc(o.textContent) + '</span></button>'; });
+        box.innerHTML = h + '</div>';
       }
       function updateSaveLabel(){
         document.getElementById("evSaveBtn").textContent = document.getElementById("evCal").value === "__local" ? "保存する（この端末のみ）" : "Googleカレンダーに保存";
@@ -1366,12 +1388,22 @@
           var dot = document.createElement("button");
           dot.type = "button"; dot.className = "cdot"; dot.style.background = cal.color;
           dot.title = "色を変更"; dot.setAttribute("aria-label", cal.summary + " の色を変更");
-          dot.addEventListener("click", function(){ openCalColorPicker(cal); });
-          var nm = document.createElement("span"); nm.className = "cname"; nm.textContent = cal.summary;
+            var nm = document.createElement("span"); nm.className = "cname"; nm.textContent = cal.summary;
           var role = document.createElement("span"); role.className = "crole";
           role.textContent = cal.primary ? "メイン" : (cal.accessRole === "owner" ? "所有者" : cal.accessRole === "writer" ? "編集可" : "閲覧のみ");
           row.appendChild(lab); row.appendChild(dot); row.appendChild(nm); row.appendChild(role);
           wrap.appendChild(row);
+        });
+        renderSetCalList();
+      }
+      function renderSetCalList(){
+        var w = document.getElementById("setCalList"); w.innerHTML = "";
+        if (!calendars.length){ w.innerHTML = '<div class="pal-note">Googleカレンダーに接続すると、カレンダーごとの色を変更できます。</div>'; return; }
+        calendars.forEach(function(cal){
+          var row = document.createElement("button"); row.type = "button"; row.className = "set-cal";
+          row.innerHTML = '<i style="background:' + cal.color + '"></i><span>' + esc(cal.summary) + '</span><em>色を変更</em>';
+          row.addEventListener("click", function(){ openCalColorPicker(cal); });
+          w.appendChild(row);
         });
       }
       function openCalColorPicker(cal){
@@ -1403,7 +1435,7 @@
         openCalColorPicker(cal);
         renderAll(); observeLabels(); markSelected(); showDetail(key(selected));
       }
-      function renderCalOptions(){
+      function renderCalOptions(){ setTimeout(renderCalPick, 0);
         var sel = document.getElementById("evCal");
         var cur = sel.value;
         sel.innerHTML = "";
@@ -1442,6 +1474,7 @@
         s.setDate(s.getDate() - ((s.getDay() - settings.weekStart + 7) % 7));
         return s;
       }
+      var monthMax = 3;
       function multiOf(e){ return addDays(e.endKeyExcl, -1) > e.startKey; }
       function weekSlots(wKey){
         var days = [], list = [], seen = {}, out = {}, slots = [];
@@ -1464,7 +1497,7 @@
           + '<span class="dnum">'+d.getDate()+'</span>';
         if (hol) h += '<span class="hol">'+hol+'</span>';
         if (rok && (big || !hol)) h += '<span class="rok'+(rok==="大安"?" good":"")+'">'+rok+'</span>';
-        var max = big ? 3 : 2, singles = evs;
+        var max = big ? monthMax : 2, singles = evs;
         if (ms && ms.n){
           singles = evs.filter(function(e){ return !multiOf(e); });
           for (var si = 0; si < ms.n; si++){
@@ -1547,13 +1580,14 @@
       }
       function renderMonth(){
         var y = stdCursor.getFullYear(), m = stdCursor.getMonth();
+        var rh = (stage.clientHeight - 46) / 6; monthMax = rh > 40 ? Math.max(1, Math.min(5, Math.floor((rh - 36) / 13))) : 3;
         document.getElementById("view-month").innerHTML =
           '<div class="std-nav"><button class="hbtn" id="stdPrev" aria-label="前の月"><svg viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg></button>'
           + '<b>'+y+'年 '+(m+1)+'月</b>'
           + '<button class="hbtn" id="stdNext" aria-label="次の月"><svg viewBox="0 0 24 24"><path d="M9.5 5.5L16 12l-6.5 6.5"/></svg></button></div>'
           + monthGridHTML(y, m, true);
-        document.getElementById("stdPrev").addEventListener("click", function(){ stdCursor = new Date(y, m-1, 1); renderMonth(); syncTitle(); });
-        document.getElementById("stdNext").addEventListener("click", function(){ stdCursor = new Date(y, m+1, 1); renderMonth(); syncTitle(); });
+        document.getElementById("stdPrev").addEventListener("click", function(){ stdCursor = new Date(y, m-1, 1); renderMonth(); syncTitle(); slideIn("view-month", -1); });
+        document.getElementById("stdNext").addEventListener("click", function(){ stdCursor = new Date(y, m+1, 1); renderMonth(); syncTitle(); slideIn("view-month", 1); });
       }
       function wkNavHTML(s){
         var e = new Date(s); e.setDate(e.getDate()+6);
@@ -1580,14 +1614,14 @@
         return items;
       }
       function renderWeek(){
-        var s = weekStartOf(selected), h = wkNavHTML(s) + '<div class="week-head wg">', first = 1440, tcols = "", allRow = "";
+        var s = weekStartOf(selected), h = '<div class="wk-sticky">' + wkNavHTML(s) + '<div class="week-head wg">', first = 1440, tcols = "", allRow = "";
         for (var i = 0; i < 7; i++){
           var d = new Date(s.getFullYear(), s.getMonth(), s.getDate()+i), k = key(d);
           h += '<div class="wh '+dowClass(d)+(holOf(k)?" is-hol":"")+(k===key(TODAY)?" is-today":"")+(k===key(selected)?" is-sel":"")+'" data-date="'+k+'" role="button"><span>'+DOW[d.getDay()]+'</span><b>'+d.getDate()+'</b></div>';
         }
         for (var j = 0; j < 7; j++){
           var kk = key(new Date(s.getFullYear(), s.getMonth(), s.getDate()+j)), evs = evsOn(kk), tm = [];
-          allRow += '<div class="wcol wall" data-date="'+kk+'" role="button">';
+          allRow += '<div class="wcol wall' + (kk === key(selected) ? ' is-sel' : '') + '" data-date="'+kk+'" role="button">';
           if (holOf(kk)) allRow += '<div class="w-ev" style="background:var(--sun);color:#fff">'+holOf(kk)+'</div>';
           evs.forEach(function(e){
             if (!e.allDay){ tm.push(e); return; }
@@ -1596,27 +1630,26 @@
           allRow += '</div>';
           var its = layoutTimed(kk, tm);
           if (its.length) first = Math.min(first, its[0].s);
-          tcols += '<div class="wcol wt" data-date="'+kk+'" role="button">';
+          tcols += '<div class="wcol wt' + (kk === key(selected) ? ' is-sel' : '') + '" data-date="'+kk+'" role="button">';
           its.forEach(function(o){
             var e = o.e;
             tcols += '<div class="w-ev" data-ev="'+esc(e.uid)+'" style="top:'+(o.s*HW/60)+'px;height:'+Math.max(16,(o.en-o.s)*HW/60-1)+'px;left:calc(100% * '+o.c+' / '+o.n+');width:calc(100% / '+o.n+' - 1px);background:'+e.color+';color:'+fg(e.color)+'"><time>'+(e.startKey < kk ? "" : e.startTime)+'</time>'+esc(e.title)+'</div>';
           });
           tcols += '</div>';
         }
-        h += '</div><div class="week-cols wk-all">' + allRow + '</div><div class="wk-grid" style="height:' + 24*HW + 'px">';
+        h += '</div><div class="week-cols wk-all">' + allRow + '</div></div><div class="wk-grid" style="height:' + 24*HW + 'px">';
         for (var hr = 0; hr < 24; hr++) h += '<div class="tg-h" style="top:' + hr*HW + 'px"><span>' + hr + ':00</span></div>';
         var nw = new Date();
         h += '<div class="wk-tcols">' + tcols + '</div>';
         if (weekStartKeyHas(s, key(TODAY))) h += '<div class="tg-now" style="left:34px;top:' + ((nw.getHours()*60+nw.getMinutes())*HW/60) + 'px"></div>';
         document.getElementById("view-week").innerHTML = h + '</div>';
-        if (currentView === "week" && weekSeen !== key(s)){ weekSeen = key(s); stage.scrollTop = Math.max(0, ((first === 1440 ? 480 : first) / 60 - 1) * HW); }
       }
       function weekStartKeyHas(s, k){ var e = addDays(key(s), 7); return k >= key(s) && k < e; }
       function wkCardHTML(d, wdW, weW){
         var k = key(d), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var weekend = d.getDay()===0 || d.getDay()===6;
         var h = '<div class="wk-card '+dowClass(d)+(hol?" is-hol":"")+(k===key(TODAY)?" is-today":"")+(k===key(selected)?" is-sel":"")
-          + '" data-date="'+k+'" role="button" style="flex-grow:'+(weekend?weW:wdW)+'">'
+          + '" data-date="'+k+'" role="button" style="flex:'+(weekend?weW:wdW)+' 1 0px">'
           + '<div class="wk-head"><span class="wk-num">'+d.getDate()+'</span><span class="wk-dow">'+DOW[d.getDay()]+'</span>'
           + (hol ? '<span class="wk-hol">'+hol+'</span>' : '')
           + (rok ? '<span class="wk-rok">'+rok+'</span>' : '') + '</div><div class="wk-evs">';
@@ -1646,26 +1679,25 @@
       var daySeen = "", HH = 44;
       function renderDay(){
         var k = key(selected), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
-        var h = '<div class="day-hero"><div class="big">'+selected.getDate()+'</div>'
+        var h = '<div class="dy-sticky"><div class="day-hero"><div class="big">'+selected.getDate()+'</div>'
           + '<div class="dow '+dowClass(selected)+'">'+selected.getFullYear()+'年'+(selected.getMonth()+1)+'月 '+DOW[selected.getDay()]+'曜日'
           + (hol ? ' ・ <span style="color:var(--sun)">'+hol+'</span>' : '') + (rok ? ' ・ '+rok : '') + (k===key(TODAY) ? ' ・ 今日' : '') + '</div></div><div class="timeline">';
-        if (!evs.length) h += '<div class="tl-row"><time></time><div class="tl-none">この日の予定はありません</div></div>';
         var tm = [];
         evs.forEach(function(e){
           if (!e.allDay){ tm.push(e); return; }
           h += '<div class="tl-row"><time>終日</time><div class="tl-ev" style="background:'+e.color+';color:'+fg(e.color)+'" data-ev="'+esc(e.uid)+'">'+esc(e.title)
              + (e.location ? '<small>'+esc(e.location)+'</small>' : '') + '</div></div>';
         });
-        h += '</div>';
+        h += '</div></div>';
         var first = 480;
-        if (tm.length){
+        if (true){
           var items = tm.map(function(e){
             var last = addDays(e.endKeyExcl, -1), s0 = e.startKey < k ? 0 : toMin(e.startTime), en = last > k ? 1440 : toMin(e.endTime);
             if (en <= s0) en = e.endTime === "00:00" ? 1440 : s0 + 30;
             if (en - s0 < 30) en = Math.min(1440, s0 + 30);
             return { e: e, s: s0, en: en, c: 0, n: 1 };
           }).sort(function(a, b){ return a.s - b.s || b.en - a.en; });
-          first = items[0].s;
+          first = items.length ? items[0].s : 480;
           var cur = [], cend = 0, groups = [];
           items.forEach(function(it){
             if (cur.length && it.s >= cend){ groups.push(cur); cur = []; cend = 0; }
@@ -1674,7 +1706,7 @@
           });
           if (cur.length) groups.push(cur);
           groups.forEach(function(g){ var n = Math.max.apply(null, g.map(function(o){ return o.c; })) + 1; g.forEach(function(o){ o.n = n; }); });
-          h += '<div class="tg" style="height:' + 24 * HH + 'px">';
+          h += '<div class="tg" data-dadd="' + k + '" style="height:' + 24 * HH + 'px">';
           for (var i = 0; i < 24; i++) h += '<div class="tg-h" style="top:' + i * HH + 'px"><span>' + i + ':00</span></div>';
           items.forEach(function(o){
             var e = o.e;
@@ -1685,17 +1717,11 @@
           h += '</div>';
         }
         document.getElementById("view-day").innerHTML = h;
-        if (currentView === "day" && daySeen !== k){ daySeen = k; stage.scrollTop = Math.max(0, (first / 60 - 1) * HH); }
       }
       function renderList(filter){
-        var host = document.getElementById("view-list"), inp = document.getElementById("listSearch");
-        if (!inp){
-          host.innerHTML = '<div class="searchbar"><input id="listSearch" type="search" placeholder="予定を検索" enterkeyhint="search" autocomplete="off"></div><div id="listResults"></div>';
-          inp = document.getElementById("listSearch");
-          if (filter) inp.value = filter;
-          inp.addEventListener("input", function(){ renderList(inp.value); });
-        }
-        var q = inp.value.trim().toLowerCase(), h = "";
+        var host = document.getElementById("view-list");
+        if (!document.getElementById("listResults")) host.innerHTML = '<div id="listResults"></div>';
+        var q = "", h = "";
         var sorted = events.filter(isVisible).slice().sort(function(a,b){ return a.startKey < b.startKey ? -1 : a.startKey > b.startKey ? 1 : cmpEv(a,b); });
         var fromKey = key(new Date(TODAY.getFullYear(), TODAY.getMonth()-1, 1));
         var lastMonth = "", shown = 0, total = 0;
@@ -1706,7 +1732,7 @@
           total++;
           if (shown >= 600) return;
           var d = e.startDateObj, ym = d.getFullYear()+"年"+(d.getMonth()+1)+"月";
-          if (ym !== lastMonth){ h += '<div class="month-label">'+(d.getMonth()+1)+'月<small>'+d.getFullYear()+'年</small></div>'; lastMonth = ym; }
+          if (ym !== lastMonth){ h += '<div class="month-label" data-ym="'+d.getFullYear()+'-'+d.getMonth()+'">'+(d.getMonth()+1)+'月<small>'+d.getFullYear()+'年</small></div>'; lastMonth = ym; }
           h += '<div class="dayrow '+dowClass(d)+'" data-date="'+e.startKey+'" role="button"><div class="dcol"><b>'+d.getDate()+'</b><span>'+DOW[d.getDay()]+'</span></div>'
              + '<div class="ecol"><div class="sw"><span class="sw-bg" aria-hidden="true">削除</span><div class="l-ev" data-ev="'+esc(e.uid)+'" role="button" title="ダブルタップで編集"><i style="background:'+e.color+'"></i><time>'+e.timeLabel+'</time><span>'+esc(e.title)+'</span></div></div></div></div>';
           shown++;
@@ -1730,7 +1756,7 @@
       }
       var observer = new IntersectionObserver(function(entries){
         entries.forEach(function(en){
-          if (en.isIntersecting && (currentView==="vgrid" || currentView==="vlist")){
+          if (en.isIntersecting && (currentView==="vgrid" || currentView==="vlist" || currentView==="list")){
             var parts = en.target.getAttribute("data-ym").split("-");
             ymTitle.textContent = parts[0]+"年"+(+parts[1]+1)+"月";
           }
@@ -1741,7 +1767,7 @@
       /* ================= detail panel ================= */
       var detail = document.getElementById("detail"), detailIn = document.getElementById("detailIn");
       function showDetail(k){
-        if (!(detailArmed && (currentView === "month" || isWeekType(currentView)))){ detail.classList.remove("open"); return; }
+        if (!(detailArmed && (currentView === "month" || currentView === "vgrid" || isWeekType(currentView)))){ detail.classList.remove("open"); return; }
         var d = parseKey(k), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var h = '<h3>'+(d.getMonth()+1)+'月'+d.getDate()+'日（'+DOW[d.getDay()]+'）'
           + (k===key(TODAY) ? '<small>今日</small>' : '') + (hol ? '<span class="hol-name">'+hol+'</span>' : '') + (rok ? '<span class="rok-name">'+rok+'</span>' : '') + '</h3>';
@@ -1772,11 +1798,11 @@
         var wkBtn = e.target.closest("[data-wkshift]");
         if (wkBtn){
           selected.setDate(selected.getDate() + 7 * parseInt(wkBtn.getAttribute("data-wkshift"), 10));
-          renderWeek(); renderWeekCards(); markSelected(); showDetail(key(selected)); syncTitle();
+          renderWeek(); renderWeekCards(); markSelected(); showDetail(key(selected)); syncTitle(); slideIn("view-" + currentView, parseInt(wkBtn.getAttribute("data-wkshift"), 10));
           return;
         }
         var evEl = e.target.closest("[data-ev]");
-        if (evEl && currentView === "day"){ openEdit(evEl.getAttribute("data-ev")); return; }
+        if (evEl){ openEdit(evEl.getAttribute("data-ev")); return; }
         var t = e.target.closest("[data-date]");
         if (!t) return;
         selected = parseKey(t.getAttribute("data-date")); detailArmed = true;
@@ -1799,14 +1825,10 @@
       stage.addEventListener("dblclick", function(e){
         if (!settings.gestures.dbltap) return;
         if (e.target.closest("input, textarea, select")) return;
-        /* in list views, double-tapping an event opens it for editing */
-        var evEl = e.target.closest("[data-ev]");
-        if (evEl && isListView()){ suppressClickUntil = Date.now() + 400; openEdit(evEl.getAttribute("data-ev")); return; }
-        /* from anywhere else, double-tap switches to the day view */
-        var t = e.target.closest("[data-date]");
-        var k = t ? t.getAttribute("data-date") : key(selected);
+        if (e.target.closest("[data-ev], button, [data-wkshift]")) return;
+        var t = e.target.closest("[data-date], [data-dadd]"); if (!t) return;
         suppressClickUntil = Date.now() + 400;
-        goToDayView(k);
+        openAddFor(t.getAttribute("data-date") || t.getAttribute("data-dadd"));
       });
       stage.addEventListener("contextmenu", function(e){
         if (e.target.closest("[data-date], [data-ev]")) e.preventDefault();
@@ -1971,6 +1993,7 @@
         if (bg) bg.style.opacity = "";
       }
       /* horizontal swipe in month / week views moves to the previous or next period */
+      function slideIn(id, dir){ var el = document.getElementById(id); if (!el) return; el.classList.remove("sl-l", "sl-r"); void el.offsetWidth; el.classList.add(dir > 0 ? "sl-r" : "sl-l"); }
       function shiftPeriod(dir){
         if (currentView === "month"){
           stdCursor = new Date(stdCursor.getFullYear(), stdCursor.getMonth() + dir, 1);
@@ -1978,7 +2001,11 @@
         } else if (isWeekType(currentView)){
           selected.setDate(selected.getDate() + 7 * dir);
           renderWeek(); renderWeekCards(); markSelected(); showDetail(key(selected)); syncTitle();
-        }
+        } else if (currentView === "day"){
+          selected.setDate(selected.getDate() + dir); stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1);
+          renderWeek(); renderWeekCards(); renderDay(); markSelected(); showDetail(key(selected)); syncTitle();
+        } else return;
+        slideIn("view-" + currentView, dir);
       }
       var pendingDeleteUid = null;
       function requestDeleteEvent(uid){
@@ -2066,7 +2093,7 @@
           /* not an active drag: fall through so tap / period-swipe handling still works */
         }
         /* period navigation: horizontal swipe in month / week views */
-        if (dInf && settings.gestures.swipeNav !== false && (currentView === "month" || isWeekType(currentView))
+        if (dInf && settings.gestures.swipeNav !== false && (currentView === "month" || isWeekType(currentView) || currentView === "day")
             && !document.querySelector(".popover.show")
             && !(e.target.closest && e.target.closest("button, input, textarea, select, a"))){
           var ndx = e.clientX - dInf.x, ndy = e.clientY - dInf.y;
@@ -2080,10 +2107,10 @@
         /* double-tap detection (touch / pen): from anywhere -> day view; in list views, on an event -> edit */
         var movedFar = dInf && Math.hypot(e.clientX - dInf.x, e.clientY - dInf.y) > 12;
         if (settings.gestures.dbltap && e.pointerType !== "mouse" && Date.now() >= suppressClickUntil && !movedFar){
-          if (e.target.closest && !e.target.closest("input, textarea, select")){
-            var evEl2 = e.target.closest("[data-ev]");
-            var t2 = e.target.closest("[data-date]");
-            var dateK2 = t2 ? t2.getAttribute("data-date") : key(selected);
+          if (e.target.closest && !e.target.closest("input, textarea, select, button, [data-ev], [data-wkshift]")){
+            var evEl2 = null;
+            var t2 = e.target.closest("[data-date], [data-dadd]");
+            var dateK2 = t2 ? (t2.getAttribute("data-date") || t2.getAttribute("data-dadd")) : key(selected);
             var tapId = (evEl2 && isListView()) ? ("ev:" + evEl2.getAttribute("data-ev")) : ("date:" + dateK2);
             var now2 = Date.now();
             if (lastTap.id === tapId && now2 - lastTap.t < 350){
@@ -2091,8 +2118,7 @@
               var evUid = wasEv ? tapId.slice(3) : null;
               lastTap = { t: 0, k: null, id: null };
               suppressClickUntil = Date.now() + 400;
-              if (wasEv) openEdit(evUid);
-              else goToDayView(dateK2);
+              if (t2) openAddFor(dateK2);
             } else lastTap = { t: now2, k: dateK2, id: tapId };
           }
         }
@@ -2109,9 +2135,18 @@
           return '<button class="tbtn' + (id === currentView ? " on" : "") + '" data-view="' + id + '"><svg viewBox="0 0 24 24">' + d.icon + '</svg><span>' + d.label + "</span></button>";
         }).join("");
       }
+      function centerHour(hr, gridSel, hh, stickySel){
+        var g = document.querySelector(gridSel); if (!g) return;
+        var st = document.querySelector(stickySel), sh = st ? st.offsetHeight : 0;
+        stage.scrollTop = Math.max(0, g.offsetTop + hr * hh - sh - (stage.clientHeight - sh) / 2);
+      }
+      function scrollTimeView(id){
+        if (id === "day") centerHour(9, "#view-day .tg", HH, "#view-day .dy-sticky");
+        else if (id === "week") centerHour(9, "#view-week .wk-grid", HW, "#view-week .wk-sticky");
+      }
       function setView(id, force){
         if (!force && !viewEnabled(id)) id = settings.enabledViews[0] || "vgrid";
-        currentView = id; detailArmed = false; daySeen = ""; weekSeen = "";
+        currentView = id; detailArmed = false;
         settings.lastView = id; saveSettings();
         document.querySelectorAll(".tbtn").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-view") === id); });
         document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); });
@@ -2121,6 +2156,7 @@
         stage.scrollTop = 0;
         if (id === "vgrid" || id === "vlist") scrollToToday(false);
         syncTitle(); showDetail(key(selected));
+        requestAnimationFrame(function(){ scrollTimeView(id); });
       }
       document.getElementById("toolbar").addEventListener("click", function(e){
         var b = e.target.closest("[data-view]"); if (!b) return;
@@ -2135,11 +2171,6 @@
         selected = new Date(TODAY); stdCursor = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
         renderAll(); observeLabels(); markSelected(); showDetail(key(TODAY)); syncTitle();
         if (currentView === "vgrid" || currentView === "vlist") scrollToToday(true);
-      });
-      document.getElementById("searchBtn").addEventListener("click", function(){
-        if (!viewEnabled("list")) return;
-        setView("list");
-        var inp = document.getElementById("listSearch"); if (inp) inp.focus();
       });
 
       /* ================= popovers ================= */
@@ -2324,7 +2355,7 @@
         var cb = e.target.closest("[data-view-toggle]"); if (!cb) return;
         var id = cb.getAttribute("data-view-toggle");
         var next = settings.enabledViews.slice();
-        if (cb.checked){ if (next.indexOf(id) < 0) next.push(id); }
+        if (cb.checked){ if (next.indexOf(id) < 0){ if (next.length >= 5){ cb.checked = false; return; } next.push(id); } }
         else {
           if (next.length <= 1){ cb.checked = true; return; }
           next = next.filter(function(x){ return x !== id; });
@@ -2362,13 +2393,13 @@
         updateSaveLabel();
         document.getElementById("evTitle").disabled = false;
         ["evCal","evDate","evEndDate","evAllDay","evLoc","evDesc"].forEach(function(id){ document.getElementById(id).disabled = false; });
-        fillTitleList(); renderTpl();
+        fillTitleList(); renderCalPick();
         document.getElementById("evSaveBtn").style.display = "";
         fillFormDefaults(dateKey);
         openPop("evPop"); prevEvDate = document.getElementById("evDate").value; syncDur();
         setTimeout(function(){ document.getElementById("evTitle").focus(); }, 240);
       }
-      function openEdit(uid){ document.getElementById("tplRow").hidden = true;
+      function openEdit(uid){ setTimeout(renderCalPick, 0);
         var e = findEvent(uid); if (!e) return;
         editingUid = uid;
         document.getElementById("evPopTitle").textContent = e.writable ? "予定を編集" : "予定の詳細（閲覧のみ）";
@@ -2424,8 +2455,42 @@
       } else setSync("", "Googleカレンダー未接続");
       renderConnectCard();
       renderCalOptions();
-      document.getElementById("evCal").addEventListener("change", updateSaveLabel);
-      document.getElementById("tplRow").addEventListener("click", tplClick);
+      document.getElementById("evCal").addEventListener("change", function(){ updateSaveLabel(); renderCalPick(); });
+      renderSetCalList();
+      var sp = document.getElementById("searchPanel"), spIn = document.getElementById("spInput"), spRes = document.getElementById("spResults");
+      function runSearch(){
+        var q = spIn.value.trim().toLowerCase(), h = "";
+        if (!q){ spRes.innerHTML = '<div class="sp-note">タイトル・場所・メモから検索します</div>'; return; }
+        var list = events.filter(isVisible).filter(function(e){ return (e.title + " " + (e.location || "") + " " + (e.description || "")).toLowerCase().indexOf(q) >= 0; })
+          .sort(function(a, b){ return a.startKey < b.startKey ? -1 : a.startKey > b.startKey ? 1 : cmpEv(a, b); });
+        list.slice(0, 200).forEach(function(e){
+          var d = e.startDateObj;
+          h += '<button type="button" class="sp-row" data-k="' + e.startKey + '"><i style="background:' + e.color + '"></i><span class="sp-d">' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + '（' + DOW[d.getDay()] + '）</span><span class="sp-t">' + esc(e.title) + '</span></button>';
+        });
+        if (!list.length) h = '<div class="sp-note">該当する予定がありません</div>';
+        else if (list.length > 200) h += '<div class="sp-note">' + list.length + '件中200件を表示しています</div>';
+        spRes.innerHTML = h;
+      }
+      function closeSearch(){ sp.hidden = true; spIn.blur(); }
+      function jumpTo(k){
+        selected = parseKey(k); stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1); detailArmed = true;
+        renderAll(); observeLabels(); markSelected(); syncTitle(); showDetail(k);
+        if (currentView === "vgrid" || currentView === "vlist") scrollToToday(false, k);
+        else if (currentView === "list"){
+          var rows = stage.querySelectorAll("#view-list .dayrow");
+          for (var i = 0; i < rows.length; i++){ if (rows[i].getAttribute("data-date") >= k){ stage.scrollTop = rows[i].offsetTop - 60; break; } }
+        }
+      }
+      document.getElementById("searchBtn").addEventListener("click", function(){ sp.hidden = false; spIn.value = ""; runSearch(); setTimeout(function(){ spIn.focus(); }, 50); });
+      document.getElementById("spClose").addEventListener("click", closeSearch);
+      spIn.addEventListener("input", runSearch);
+      spRes.addEventListener("click", function(e){ var b = e.target.closest(".sp-row"); if (!b) return; closeSearch(); jumpTo(b.getAttribute("data-k")); });
+      document.getElementById("calPick").addEventListener("click", function(e){
+        var sel = document.getElementById("evCal"), box = document.getElementById("calPick");
+        if (e.target.closest(".cp-cur")){ var l = box.querySelector(".cp-list"); l.hidden = !l.hidden; return; }
+        var o = e.target.closest(".cp-opt"); if (!o) return;
+        sel.value = o.getAttribute("data-v"); sel.dispatchEvent(new Event("change"));
+      });
       document.getElementById("toastUndo").addEventListener("click", function(){ var f = toastFn; document.getElementById("toast").hidden = true; toastFn = null; if (f) f(); });
       try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(){ if (settings.refill === "auto") applyAppearance(); }); } catch(e){}
       document.getElementById("evTime").addEventListener("change", function(){
