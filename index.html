@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#c0453e" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="マイカレンダー" />
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
@@ -1889,7 +1889,7 @@
         document.documentElement.style.setProperty("--detail-h", curDetailH + "px");
       }
       function showDetail(k){
-        if (!(currentView === "month" || currentView === "vgrid")){ detail.classList.remove("open"); lastDetailSig = "c"; return; }
+        if (!(currentView === "month" || currentView === "vgrid" || /^week[ABC]$/.test(currentView))){ detail.classList.remove("open"); lastDetailSig = "c"; return; }
         var d = parseKey(k), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var h = '<h3>'+(d.getMonth()+1)+'月'+d.getDate()+'日（'+DOW[d.getDay()]+'）'
           + (k===key(TODAY) ? '<small>今日</small>' : '') + (hol ? '<span class="hol-name">'+hol+'</span>' : '') + (rok ? '<span class="rok-name">'+rok+'</span>' : '') + '</h3>';
