@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#c0453e" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="マイカレンダー" />
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
@@ -490,6 +490,13 @@
       .popover.center.show{ animation:pop-in-c .22s ease; }
       @keyframes pop-in-c{ from{ opacity:0; transform:translate(-50%,-46%); } to{ opacity:1; transform:translate(-50%,-50%); } }
       .popover.small{ width:min(340px, calc(100vw - 48px)); max-height:70dvh; padding:10px 12px; }
+      /* ---- round 6: blur diagnostics ---- */
+      .app{ padding-top:calc(env(safe-area-inset-top, 0px) + var(--fx-top, 0px)); }
+      html.fx-fixed body{ position:fixed; inset:0; height:auto; }
+      .fx-row{ display:flex; align-items:center; gap:10px; padding:7px 2px; border-top:1px solid var(--line-soft); font-size:13px; }
+      .fx-row span{ flex:1; }
+      .fx-row input[type="checkbox"]{ width:22px; height:22px; flex:none; min-height:0; }
+      .fx-row select{ min-height:32px; font-size:14px; }
     </style>
   </head>
   <body>
@@ -609,6 +616,10 @@
         <div class="pal-row" id="calColorPal"></div>
         <div class="pal-note">四角いチップはGoogleカレンダー側の色です。色はこのアプリ内の表示にだけ使われ、Googleカレンダーは変わりません。</div>
       </div>
+
+      <h4>上部のぼけ診断（試験用）</h4>
+      <div class="pal-note">切り替えるたびにすぐ反映されます。ぼけが消えた設定を教えてください。</div>
+      <div id="fxBox"></div>
 
       <h4>同期する期間</h4>
       <div class="set-row" style="border-top:0">
@@ -809,6 +820,7 @@
         calColors: {},
         consented: false,
         templates: [],
+        fx: { noTheme: false, noCover: false, fixedRoot: false, topPad: 0 },
         detailH: 190,
         clientId: ""
       };
@@ -864,12 +876,12 @@
           root.setProperty("--sat", darkPaper ? "#7ea6f5" : "#3a6fd8");
           root.setProperty("--today", c.today);
           root.setProperty("--backdrop", mixColor(c.frame, "#2a2a2a", 0.55));
-          document.querySelector('meta[name="theme-color"]').setAttribute("content", deep);
+          setThemeColor(deep);
         } else {
           root.setProperty("--theme", preset.theme);
           root.setProperty("--theme-deep", preset.deep);
           root.setProperty("--backdrop", preset.backdrop);
-          document.querySelector('meta[name="theme-color"]').setAttribute("content", preset.deep);
+          setThemeColor(preset.deep);
           var rk0 = resolveRefill(settings.refill), r = REFILLS[rk0] || REFILLS.white;
           root.setProperty("--sheet", r.sheet); root.setProperty("--sheet-2", r.sheet2);
           root.setProperty("--ink", r.ink); root.setProperty("--ink-2", r.ink2); root.setProperty("--ink-3", r.ink3);
@@ -1081,10 +1093,6 @@
           } catch(e){ fb(); }
         });
       }
-      function kvDel(k){
-        kvOpen().then(function(d){ if (d) try { d.transaction("kv", "readwrite").objectStore("kv").delete(k); } catch(e){} });
-        try { localStorage.removeItem(k); } catch(e){}
-      }
       function lsGet(k){ try { return JSON.parse(localStorage.getItem(k) || "null"); } catch(e){ return null; } }
       function kvLoad(){
         return Promise.all([kvGet(CACHE_KEY), kvGet(LOCAL_KEY)]).then(function(r){ PRE.cache = r[0]; PRE.local = r[1]; });
@@ -1092,7 +1100,7 @@
       function fg(c){ return luminance(c) > 0.62 ? "#222" : "#fff"; }
       function toMin(t){ var p = (t || "0:0").split(":"); return (+p[0]) * 60 + (+p[1]); }
       function fmtMin(m){ return pad(Math.floor(m / 60)) + ":" + pad(m % 60); }
-      var evDur = 60, prevEvDate = "", detailArmed = false;
+      var evDur = 60, prevEvDate = "";
       function syncDur(){ var d = toMin(document.getElementById("evEnd").value) - toMin(document.getElementById("evTime").value); evDur = d > 0 ? d : 60; }
       function fillTitleList(){
         var seen = {}, out = [];
@@ -1488,6 +1496,31 @@
         });
         renderSetCalList();
       }
+      var themeMeta = null, lastTheme = "#c0453e";
+      function setThemeColor(v){ lastTheme = v; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", v); }
+      function applyFx(){
+        var f = settings.fx || {}, root = document.documentElement;
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (f.noTheme){ if (m){ themeMeta = m; m.remove(); } }
+        else if (!m && themeMeta){ themeMeta.setAttribute("content", lastTheme); document.head.appendChild(themeMeta); }
+        var vp = document.querySelector('meta[name="viewport"]');
+        if (vp) vp.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" + (f.noCover ? "" : ", viewport-fit=cover"));
+        root.classList.toggle("fx-fixed", !!f.fixedRoot);
+        root.style.setProperty("--fx-top", (f.topPad || 0) + "px");
+      }
+      function renderFx(){
+        var f = settings.fx = settings.fx || {}, box = document.getElementById("fxBox");
+        var rows = [["noTheme", "テーマ色の指定（theme-color）をやめる"], ["noCover", "画面全体表示（viewport-fit=cover）をやめる"], ["fixedRoot", "画面を固定配置（fixed）にする"]];
+        var h = rows.map(function(r){ return '<label class="fx-row"><span>' + r[1] + '</span><input type="checkbox" data-fx="' + r[0] + '"' + (f[r[0]] ? " checked" : "") + '></label>'; }).join("");
+        h += '<label class="fx-row"><span>上端を下げる</span><select data-fx="topPad">' + [0, 16, 32, 52].map(function(v){ return '<option value="' + v + '"' + ((f.topPad || 0) === v ? " selected" : "") + '>' + v + 'pt</option>'; }).join("") + '</select></label>';
+        box.innerHTML = h;
+      }
+      document.addEventListener("change", function(e){
+        var t = e.target, k = t.getAttribute && t.getAttribute("data-fx"); if (!k) return;
+        settings.fx = settings.fx || {};
+        settings.fx[k] = t.type === "checkbox" ? t.checked : +t.value;
+        saveSettings(); applyFx();
+      });
       function renderSetCalList(){
         var w = document.getElementById("setCalList"); w.innerHTML = "";
         if (!calendars.length){ w.innerHTML = '<div class="pal-note">Googleカレンダーに接続すると、カレンダーごとの色を変更できます。</div>'; return; }
@@ -1926,10 +1959,10 @@
           return;
         }
         var evEl = e.target.closest("[data-ev]");
-        if (evEl){ openEdit(evEl.getAttribute("data-ev")); return; }
+        if (evEl && currentView === "day"){ openEdit(evEl.getAttribute("data-ev")); return; }
         var t = e.target.closest("[data-date]");
         if (!t) return;
-        selected = parseKey(t.getAttribute("data-date")); detailArmed = true;
+        selected = parseKey(t.getAttribute("data-date"));
         markSelected(); renderWeek(); renderWeekCards(); renderDay(); showDetail(key(selected)); syncTitle();
       });
 
@@ -1939,16 +1972,11 @@
         openAdd(k);
       }
       function isListView(){ return currentView === "list" || currentView === "vlist"; }
-      function goToDayView(k){
-        if (k){ selected = parseKey(k); stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1); }
-        if (currentView === "day"){ markSelected(); showDetail(key(selected)); syncTitle(); return; }
-        renderWeek(); renderWeekCards(); renderDay();
-        setView("day", true);
-        markSelected(); showDetail(key(selected)); syncTitle();
-      }
       stage.addEventListener("dblclick", function(e){
         if (!settings.gestures.dbltap) return;
         if (e.target.closest("input, textarea, select")) return;
+        var evD = e.target.closest("[data-ev]");
+        if (evD && isListView()){ suppressClickUntil = Date.now() + 400; openEdit(evD.getAttribute("data-ev")); return; }
         if (e.target.closest("[data-ev], button, [data-wkshift]")) return;
         var t = e.target.closest("[data-date], [data-dadd]"); if (!t) return;
         suppressClickUntil = Date.now() + 400;
@@ -2285,7 +2313,7 @@
       }
       function setView(id, force){
         if (!force && !viewEnabled(id)) id = settings.enabledViews[0] || "vgrid";
-        currentView = id; detailArmed = false;
+        currentView = id;
         lazyRender(id); markSelected();
         settings.lastView = id; saveSettings();
         document.querySelectorAll(".tbtn").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-view") === id); });
@@ -2588,6 +2616,7 @@
       function boot(){
       loadSettings();
       clientId = settings.clientId || "";
+      applyFx(); renderFx();
       var cachedAt = loadStored();
       document.getElementById("clientIdInput").value = clientId;
       applyAppearance();
@@ -2630,7 +2659,7 @@
       }
       function closeSearch(){ sp.hidden = true; spIn.blur(); }
       function jumpTo(k){
-        selected = parseKey(k); stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1); detailArmed = true;
+        selected = parseKey(k); stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1);
         renderAll(); observeLabels(); markSelected(); syncTitle(); showDetail(k);
         if (currentView === "vgrid" || currentView === "vlist") scrollToToday(false, k);
         else if (currentView === "list"){
