@@ -37,7 +37,7 @@
       }
       *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
       html,body{ height:100%; overflow:hidden; overscroll-behavior:none; }
-      html{ background:var(--theme-deep); }
+      html{ background:var(--theme); }
       body{
         margin:0; background:var(--theme-deep);
         font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
@@ -820,7 +820,7 @@
         calColors: {},
         consented: false,
         templates: [],
-        fx: { noTheme: false, noCover: false, fixedRoot: false, topPad: 20 },
+        fx: { noTheme: false, noCover: false, fixedRoot: true, topPad: 0 },
         detailH: 190,
         clientId: ""
       };
@@ -876,12 +876,12 @@
           root.setProperty("--sat", darkPaper ? "#7ea6f5" : "#3a6fd8");
           root.setProperty("--today", c.today);
           root.setProperty("--backdrop", mixColor(c.frame, "#2a2a2a", 0.55));
-          setThemeColor(deep);
+          setThemeColor(c.frame);
         } else {
           root.setProperty("--theme", preset.theme);
           root.setProperty("--theme-deep", preset.deep);
           root.setProperty("--backdrop", preset.backdrop);
-          setThemeColor(preset.deep);
+          setThemeColor(preset.theme);
           var rk0 = resolveRefill(settings.refill), r = REFILLS[rk0] || REFILLS.white;
           root.setProperty("--sheet", r.sheet); root.setProperty("--sheet-2", r.sheet2);
           root.setProperty("--ink", r.ink); root.setProperty("--ink-2", r.ink2); root.setProperty("--ink-3", r.ink3);
