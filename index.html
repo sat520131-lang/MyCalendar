@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#c0453e" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -43,7 +43,7 @@
         font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
         color:var(--ink);
         display:flex; justify-content:center;
-        position:fixed; inset:0; width:100%;
+        position:relative; height:100dvh; width:100%;
       }
 
       /* ---------- App frame : theme background + paper refill sheet ---------- */
@@ -52,10 +52,10 @@
         background:linear-gradient(168deg, var(--theme) 0%, var(--theme-deep) 100%);
         display:flex; flex-direction:column;
         /* iPhone notch / Dynamic Island: keep the title bar below the camera area */
-        padding:calc(18px + env(safe-area-inset-top, 0px)) calc(10px + env(safe-area-inset-right, 0px)) 0px calc(10px + env(safe-area-inset-left, 0px));
-        gap:6px;
+        padding:env(safe-area-inset-top, 0px) calc(6px + env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) calc(6px + env(safe-area-inset-left, 0px));
+        gap:4px;
       }
-      header{ padding-top:4px; }
+      header{ padding-top:0; }
       .cell, .wcol, .wk-card, .dayrow, .week-head .wh, .ev, .w-ev, .wk-ev, .l-ev{
         -webkit-touch-callout:none; -webkit-user-select:none; user-select:none;
       }
@@ -474,6 +474,14 @@
       .sp-res{ flex:0 1 auto; min-height:0; }
       .sp-row{ padding:8px 12px; }
       .sp-note{ padding:10px 14px; }
+      /* ---- round 4 ---- */
+      html, body, .app{ touch-action:pan-x pan-y; }
+      .detail, .detail.open{ max-height:none; transition:none; overflow:visible; }
+      .detail{ display:none; flex:none; height:var(--detail-h, 190px); flex-direction:column; border-top:1px solid var(--line-soft); background:var(--sheet); }
+      .detail.open{ display:flex; }
+      .detail-grip{ flex:none; height:22px; display:flex; align-items:center; justify-content:center; touch-action:none; cursor:row-resize; }
+      .detail-grip span{ width:40px; height:4px; border-radius:2px; background:var(--ink-3); opacity:.55; }
+      .detail-in{ flex:1; min-height:0; overflow-y:auto; padding:0 14px 10px; -webkit-overflow-scrolling:touch; }
     </style>
   </head>
   <body>
@@ -519,7 +527,7 @@
         </div>
 
         <div class="searchpanel" id="searchPanel" hidden><div class="sp-box"><div class="sp-bar"><input id="spInput" type="search" placeholder="予定を検索" enterkeyhint="search" autocomplete="off"><button type="button" id="spClose">閉じる</button></div><div class="sp-res" id="spResults"></div></div></div>
-        <div class="detail" id="detail"><div class="detail-in" id="detailIn"></div></div>
+        <div class="detail" id="detail"><div class="detail-grip" id="detailGrip"><span></span></div><div class="detail-in" id="detailIn"></div></div>
       </div>
 
       <nav class="toolbar" id="toolbar" aria-label="ビュー切り替え"></nav>
@@ -596,8 +604,8 @@
 
       <h4>同期する期間</h4>
       <div class="set-row" style="border-top:0">
-        <span class="set-label">Googleから読み込む範囲<small>全期間に固定されています</small></span>
-        <span style="font-size:13px;font-weight:600;flex:none">全期間</span>
+        <span class="set-label">Googleから読み込む範囲<small>表示範囲に余裕を加えた約26か月分を取得します</small></span>
+        <span style="font-size:13px;font-weight:600;flex:none">約26か月</span>
       </div>
 
       <h4>ツールバーに表示するビュー（最大5つ）</h4>
@@ -633,8 +641,10 @@
           <div><label for="evEnd">終了時刻</label><input id="evEnd" type="time" value="11:00" /></div>
         </div>
         <label class="checkline"><input type="checkbox" id="evAllDay" /> 終日の予定にする</label>
-        <label for="evLoc">場所</label>
-        <input id="evLoc" type="text" autocomplete="off" />
+        <div class="form-row">
+          <div><label for="evLoc">場所</label><input id="evLoc" type="text" autocomplete="off" /></div>
+          <div><label for="evAlert">通知</label><select id="evAlert"></select></div>
+        </div>
         <label for="evDesc">メモ</label>
         <textarea id="evDesc"></textarea>
         <div class="form-msg" id="evMsg"></div>
@@ -791,6 +801,7 @@
         calColors: {},
         consented: false,
         templates: [],
+        detailH: 190,
         clientId: ""
       };
       function saveSettings(){ try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch(e){} }
@@ -1083,7 +1094,7 @@
         document.getElementById("titleList").innerHTML = out.map(function(t){ return '<option value="' + esc(t) + '">'; }).join("");
       }
       var syncPending = false, lastSync = 0;
-      var SYNC_FIELDS = "&fields=" + encodeURIComponent("items(id,status,summary,location,description,start,end),nextPageToken");
+      var SYNC_FIELDS = "&fields=" + encodeURIComponent("items(id,status,summary,location,description,start,end,reminders),nextPageToken");
       var TZ = ""; try { TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch(e){}
       function addDays(k, n){ var d = parseKey(k); d.setDate(d.getDate() + n); return key(d); }
       function timedBody(sKey, lastKey, st, et){
@@ -1105,8 +1116,8 @@
         locals = (PRE.local || lsGet(LOCAL_KEY) || []).map(revive);
         cache = PRE.cache || lsGet(CACHE_KEY);
         if (cache && cache.events){
-          calendars = cache.calendars || []; hiddenCals = cache.hidden || {};
-          events = cache.events.map(revive).concat(locals);
+          calendars = (cache.calendars || []).map(function(c){ if (settings.calColors[c.id]) c.color = settings.calColors[c.id]; return c; }); hiddenCals = cache.hidden || {};
+          events = cache.events.map(revive).map(function(e){ if (settings.calColors[e.calendarId]) e.color = settings.calColors[e.calendarId]; return e; }).concat(locals);
           return cache.t;
         }
         events = buildSampleEvents().concat(locals);
@@ -1123,34 +1134,56 @@
         events = events.filter(function(x){ return x.uid !== uid; });
         saveCache(); saveLocal(); renderAll(); observeLabels(); markSelected(); showDetail(key(selected));
       }
-      function syncAll(){
+      var failedCalIds = [];
+      function fetchCalList(tok, acc){
+        return apiFetch("/users/me/calendarList?maxResults=250&showHidden=false" + (tok ? "&pageToken=" + encodeURIComponent(tok) : "")).then(function(d){
+          acc = acc.concat(d.items || []);
+          return d.nextPageToken ? fetchCalList(d.nextPageToken, acc) : acc;
+        });
+      }
+      function fetchRetry(cal, b, n){
+        return fetchCalEvents(cal, b[0].toISOString(), b[1].toISOString(), null, []).catch(function(e){
+          var transient = e.message !== "auth" && (!/\((4\d\d)\)/.test(e.message) || /\(429\)/.test(e.message));
+          if (!transient || n <= 0) throw e;
+          return new Promise(function(r){ setTimeout(r, 1000 * (3 - n)); }).then(function(){ return fetchRetry(cal, b, n - 1); });
+        });
+      }
+      function syncAll(onlyFailed){
         if (!accessToken) return;
         if (syncing){ syncPending = true; return; }
+        var partial = !!(onlyFailed && failedCalIds.length && calendars.length);
         syncing = true;
-        setSync("busy", "同期中…");
-        apiFetch("/users/me/calendarList?maxResults=250&showHidden=false")
-        .then(function(data){
-          calendars = (data.items || []).map(function(c, i){
-            return { id:c.id, summary:c.summary || c.id, backgroundColor:c.backgroundColor || "#8e7cc3",
-                     color: settings.calColors[c.id] || PALETTE[i % PALETTE.length],
-                     accessRole:c.accessRole || "reader", primary:!!c.primary, timeZone:c.timeZone || "" };
-          });
-          renderCalList(); renderCalOptions();
+        setSync("busy", partial ? "失敗したカレンダーを再取得中…" : "同期中…");
+        (partial ? Promise.resolve(null) : fetchCalList(null, [])).then(function(items){
+          if (items){
+            calendars = items.map(function(c, i){
+              return { id:c.id, summary:c.summary || c.id, backgroundColor:c.backgroundColor || "#8e7cc3",
+                       color: settings.calColors[c.id] || PALETTE[i % PALETTE.length],
+                       accessRole:c.accessRole || "reader", primary:!!c.primary, timeZone:c.timeZone || "" };
+            });
+            renderCalList(); renderCalOptions();
+          }
           var b = syncBounds(), failed = [];
-          return Promise.all(calendars.map(function(cal){
-            return fetchCalEvents(cal, b[0].toISOString(), b[1].toISOString(), null, []).catch(function(e){
+          var targets = partial ? calendars.filter(function(c){ return failedCalIds.indexOf(c.id) >= 0; }) : calendars;
+          return Promise.all(targets.map(function(cal){
+            return fetchRetry(cal, b, 2).catch(function(e){
               if (e.message === "auth") throw e;
               failed.push(cal); return [];
             });
           })).then(function(lists){
-            var failedIds = failed.map(function(c){ return c.id; });
-            var keep = events.filter(function(x){ return (x.local && x.calendarId === "__local") || failedIds.indexOf(x.calendarId) >= 0; });
+            var tIds = targets.map(function(c){ return c.id; }), fIds = failed.map(function(c){ return c.id; });
+            var keep = events.filter(function(x){
+              if (x.local && x.calendarId === "__local") return true;
+              if (fIds.indexOf(x.calendarId) >= 0) return true;
+              return partial && tIds.indexOf(x.calendarId) < 0;
+            });
             events = [].concat.apply([], lists).concat(keep);
+            failedCalIds = fIds;
             syncing = false; lastSync = Date.now();
             saveCache();
             var n = new Date(lastSync);
             setSync(failed.length ? "err" : "on", failed.length
-              ? "一部取得できませんでした: " + failed.map(function(c){ return c.summary; }).join("、")
+              ? "取得できなかったカレンダー: " + failed.map(function(c){ return c.summary; }).join("、") + "（「更新」で再取得）"
               : "同期済み " + pad(n.getHours()) + ":" + pad(n.getMinutes()) + " ・ " + calendars.length + "カレンダー / " + events.length + "件");
             document.getElementById("gStatus").textContent = "接続中: " + calendars.length + "件のカレンダー、予定 " + events.length + " 件を表示しています。";
             document.getElementById("calSection").hidden = false;
@@ -1207,7 +1240,8 @@
           allDay: allDay, startKey: startKey, endKeyExcl: endKeyExcl,
           timeLabel: timeLabel, startTime: startTime, endTime: endTime,
           startDateObj: startDateObj,
-          writable: (cal.accessRole === "owner" || cal.accessRole === "writer")
+          writable: (cal.accessRole === "owner" || cal.accessRole === "writer"),
+          rem: it.reminders ? { d: !!it.reminders.useDefault, o: (it.reminders.overrides || []).filter(function(r){ return r.method === "popup"; }).map(function(r){ return r.minutes; }) } : null
         };
       }
 
@@ -1227,7 +1261,24 @@
           var tb = timedBody(date, last, t1, t2);
           body.start = tb.start; body.end = tb.end;
         }
+        var av = document.getElementById("evAlert").value;
+        if (av !== alertInit){
+          body.reminders = av === "default" ? { useDefault: true } : av === "none" ? { useDefault: false, overrides: [] } : { useDefault: false, overrides: [{ method: "popup", minutes: +av }] };
+        }
         return body;
+      }
+      var ALERT_T = [["default","カレンダーの標準"],["none","なし"],["0","開始時刻"],["5","5分前"],["10","10分前"],["15","15分前"],["30","30分前"],["60","1時間前"],["120","2時間前"],["1440","1日前"],["10080","1週間前"]];
+      var ALERT_A = [["default","カレンダーの標準"],["none","なし"],["0","当日 0:00"],["360","前日 18:00"],["900","前日 9:00"],["2340","2日前 9:00"],["9540","1週間前 9:00"]];
+      var alertInit = "default";
+      function alertLabel(v){ var m = +v; return m % 1440 === 0 ? (m / 1440) + "日前" : m % 60 === 0 ? (m / 60) + "時間前" : m + "分前"; }
+      function remToVal(r){ return (!r || r.d) ? "default" : (r.o.length ? String(r.o[0]) : "none"); }
+      function fillAlertOptions(keep){
+        var sel = document.getElementById("evAlert"), cur = keep === undefined ? sel.value : keep;
+        var list = document.getElementById("evAllDay").checked ? ALERT_A : ALERT_T;
+        sel.innerHTML = list.map(function(o){ return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join("");
+        var has = list.some(function(o){ return o[0] === cur; });
+        if (!has && /^\d+$/.test(cur)){ sel.insertAdjacentHTML("beforeend", '<option value="' + cur + '">' + alertLabel(cur) + '</option>'); has = true; }
+        sel.value = has ? cur : "default";
       }
       function renderCalPick(){
         var sel = document.getElementById("evCal"), box = document.getElementById("calPick"), cur = sel.options[sel.selectedIndex];
@@ -1238,6 +1289,7 @@
       }
       function updateSaveLabel(){
         document.getElementById("evSaveBtn").textContent = document.getElementById("evCal").value === "__local" ? "保存する（この端末のみ）" : "Googleカレンダーに保存";
+        document.getElementById("evAlert").disabled = document.getElementById("evCal").value === "__local" || document.getElementById("evSaveBtn").style.display === "none";
       }
       function saveEvent(ev){
         ev.preventDefault();
@@ -1249,6 +1301,11 @@
         var cur = editingUid ? findEvent(editingUid) : null;
         if (!title){ msg.textContent = "タイトルを入力してください。"; return; }
         if (!date){ msg.textContent = "日付を選んでください。"; return; }
+        var vAll = document.getElementById("evAllDay").checked, vLast = document.getElementById("evEndDate").value || date;
+        if (vLast < date){ msg.textContent = "終了日が開始日より前になっています。"; return; }
+        if (!vAll && vLast === date && (document.getElementById("evEnd").value || "11:00") <= (document.getElementById("evTime").value || "10:00")){
+          msg.textContent = "終了時刻が開始時刻より前（または同じ）です。日をまたぐ場合は、終了日を翌日にしてください。"; return;
+        }
         if (calId === "__local"){
           if (cur && !cur.local){ msg.textContent = "Googleの予定は端末内に移せません。"; return; }
           saveLocalFromForm(title, date); return;
@@ -1412,6 +1469,7 @@
           });
           lab.appendChild(cb);
           var dot = document.createElement("button");
+        dot.addEventListener("click", function(ev){ ev.stopPropagation(); closePops(); setTimeout(function(){ openPop("settingsPop"); openCalColorPicker(cal); }, 80); });
           dot.type = "button"; dot.className = "cdot"; dot.style.background = cal.color;
           dot.title = "色を変更"; dot.setAttribute("aria-label", cal.summary + " の色を変更");
             var nm = document.createElement("span"); nm.className = "cname"; nm.textContent = cal.summary;
@@ -1457,6 +1515,7 @@
         settings.calColors[cal.id] = color;
         saveSettings();
         events.forEach(function(e){ if (e.calendarId === cal.id) e.color = color; });
+        saveCache();
         renderCalList();
         openCalColorPicker(cal);
         renderAll(); observeLabels(); markSelected(); showDetail(key(selected));
@@ -1770,7 +1829,15 @@
         if (total > shown) h += '<div class="list-note">' + total + '件中 ' + shown + '件までを表示しています</div>';
         document.getElementById("listResults").innerHTML = h;
       }
-      function renderAll(){ idxDirty = true; renderVGrid(); renderVList(); renderMonth(); renderWeek(); renderWeekCards(); renderDay(); renderList(""); }
+      var dirtyV = {};
+      var RENDERERS = { vgrid: renderVGrid, vlist: renderVList, month: renderMonth, week: renderWeek, weekA: renderWeekCards, weekB: renderWeekCards, weekC: renderWeekCards, day: renderDay, list: function(){ renderList(""); } };
+      function lazyRender(id){
+        if (!dirtyV[id] || !RENDERERS[id]) return;
+        RENDERERS[id]();
+        dirtyV[id] = false;
+        if (id === "weekA" || id === "weekB" || id === "weekC"){ dirtyV.weekA = dirtyV.weekB = dirtyV.weekC = false; }
+      }
+      function renderAll(){ idxDirty = true; Object.keys(RENDERERS).forEach(function(k){ dirtyV[k] = true; }); lazyRender(currentView); }
 
       /* ================= title sync ================= */
       function isWeekType(v){ return v==="week" || v==="weekA" || v==="weekB" || v==="weekC"; }
@@ -1806,8 +1873,14 @@
 
       /* ================= detail panel ================= */
       var detail = document.getElementById("detail"), detailIn = document.getElementById("detailIn");
+      var lastDetailSig = "", curDetailH = 190;
+      function applyDetailH(h){
+        var sh = document.querySelector(".sheet"), max = Math.max(90, sh.clientHeight - 200);
+        curDetailH = Math.max(64, Math.min(h, max));
+        document.documentElement.style.setProperty("--detail-h", curDetailH + "px");
+      }
       function showDetail(k){
-        if (!(detailArmed && (currentView === "month" || currentView === "vgrid"))){ detail.classList.remove("open"); return; }
+        if (!(currentView === "month" || currentView === "vgrid")){ detail.classList.remove("open"); lastDetailSig = "c"; return; }
         var d = parseKey(k), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var h = '<h3>'+(d.getMonth()+1)+'月'+d.getDate()+'日（'+DOW[d.getDay()]+'）'
           + (k===key(TODAY) ? '<small>今日</small>' : '') + (hol ? '<span class="hol-name">'+hol+'</span>' : '') + (rok ? '<span class="rok-name">'+rok+'</span>' : '') + '</h3>';
@@ -1819,6 +1892,8 @@
         h += '<button class="d-add" id="dAdd">＋ この日に予定を追加</button>';
         detailIn.innerHTML = h;
         detail.classList.add("open");
+        var sig = "o" + curDetailH;
+        if (sig !== lastDetailSig){ lastDetailSig = sig; if (currentView === "month") requestAnimationFrame(function(){ renderMonth(); }); }
         detailIn.querySelectorAll("[data-ev]").forEach(function(b){
           b.addEventListener("click", function(){ openEdit(b.getAttribute("data-ev")); });
         });
@@ -2202,6 +2277,7 @@
       function setView(id, force){
         if (!force && !viewEnabled(id)) id = settings.enabledViews[0] || "vgrid";
         currentView = id; detailArmed = false;
+        lazyRender(id); markSelected();
         settings.lastView = id; saveSettings();
         document.querySelectorAll(".tbtn").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-view") === id); });
         document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); });
@@ -2249,7 +2325,7 @@
       document.addEventListener("keydown", function(e){ if (e.key === "Escape") closePops(); });
 
       syncBtn.addEventListener("click", function(){ if (!accessToken && clientId) connectGoogle(); else { openPop("googlePop"); var cs = document.getElementById("calSection"); if (!cs.hidden) setTimeout(function(){ cs.scrollIntoView(); }, 60); } });
-      resyncBtn.addEventListener("click", function(){ syncAll(); });
+      resyncBtn.addEventListener("click", function(){ syncAll(true); });
       document.getElementById("gConnectBtn").addEventListener("click", connectGoogle);
       document.getElementById("gDisconnectBtn").addEventListener("click", function(){
         if (accessToken && window.google && google.accounts.oauth2){
@@ -2450,11 +2526,12 @@
         document.getElementById("evTime").value = "10:00";
         document.getElementById("evEnd").value = "11:00";
         document.getElementById("evDelBtn").hidden = true;
+        alertInit = "default"; fillAlertOptions("default");
         updateSaveLabel();
         document.getElementById("evTitle").disabled = false;
-        ["evCal","evDate","evEndDate","evAllDay","evLoc","evDesc"].forEach(function(id){ document.getElementById(id).disabled = false; });
+        ["evCal","evDate","evEndDate","evAllDay","evLoc","evDesc","evAlert"].forEach(function(id){ document.getElementById(id).disabled = false; });
         fillTitleList(); renderCalPick();
-        document.getElementById("evSaveBtn").style.display = "";
+        document.getElementById("evSaveBtn").style.display = ""; updateSaveLabel();
         fillFormDefaults(dateKey);
         openPop("evPop"); prevEvDate = document.getElementById("evDate").value; syncDur();
         setTimeout(function(){ document.getElementById("evTitle").focus(); }, 240);
@@ -2468,11 +2545,12 @@
         document.getElementById("evLoc").value = e.location || "";
         document.getElementById("evDesc").value = e.description || "";
         document.getElementById("evAllDay").checked = e.allDay;
+        alertInit = remToVal(e.rem); fillAlertOptions(alertInit);
         document.getElementById("evTime").value = e.startTime || "10:00";
         document.getElementById("evEnd").value = e.endTime || "11:00";
         document.getElementById("evDelBtn").hidden = !e.writable;
         var dis = !e.writable;
-        ["evTitle","evCal","evDate","evEndDate","evTime","evEnd","evAllDay","evLoc","evDesc"].forEach(function(id){
+        ["evTitle","evCal","evDate","evEndDate","evTime","evEnd","evAllDay","evLoc","evDesc","evAlert"].forEach(function(id){
           document.getElementById(id).disabled = dis;
         });
         document.getElementById("evSaveBtn").style.display = dis ? "none" : "";
@@ -2489,6 +2567,7 @@
         var on = document.getElementById("evAllDay").checked;
         document.getElementById("evTime").disabled = on;
         document.getElementById("evEnd").disabled = on;
+        fillAlertOptions();
       });
       document.getElementById("addBtn").addEventListener("click", function(){
         openAdd(key(selected));
@@ -2517,6 +2596,15 @@
       renderCalOptions();
       document.getElementById("evCal").addEventListener("change", function(){ updateSaveLabel(); renderCalPick(); });
       renderSetCalList();
+      applyDetailH(settings.detailH || 190);
+      var grip = document.getElementById("detailGrip"), gripDrag = null;
+      grip.addEventListener("pointerdown", function(e){ gripDrag = { y: e.clientY, h: curDetailH }; try { grip.setPointerCapture(e.pointerId); } catch(x){} e.preventDefault(); });
+      grip.addEventListener("pointermove", function(e){ if (gripDrag) applyDetailH(gripDrag.h + (gripDrag.y - e.clientY)); });
+      function endGrip(){ if (!gripDrag) return; gripDrag = null; settings.detailH = curDetailH; saveSettings(); lastDetailSig = ""; showDetail(key(selected)); }
+      grip.addEventListener("pointerup", endGrip); grip.addEventListener("pointercancel", endGrip);
+      document.addEventListener("gesturestart", function(e){ e.preventDefault(); });
+      document.addEventListener("gesturechange", function(e){ e.preventDefault(); });
+      document.addEventListener("touchmove", function(e){ if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
       var sp = document.getElementById("searchPanel"), spIn = document.getElementById("spInput"), spRes = document.getElementById("spResults");
       function runSearch(){
         var q = spIn.value.trim().toLowerCase(), h = "";
@@ -2525,7 +2613,7 @@
           .sort(function(a, b){ return a.startKey < b.startKey ? -1 : a.startKey > b.startKey ? 1 : cmpEv(a, b); });
         list.slice(0, 200).forEach(function(e){
           var d = e.startDateObj;
-          h += '<button type="button" class="sp-row" data-k="' + e.startKey + '"><i style="background:' + e.color + '"></i><span class="sp-d">' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + '（' + DOW[d.getDay()] + '）</span><span class="sp-t">' + esc(e.title) + '</span></button>';
+          h += '<button type="button" class="sp-row" data-u="' + esc(e.uid) + '" data-k="' + e.startKey + '"><i style="background:' + e.color + '"></i><span class="sp-d">' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + '（' + DOW[d.getDay()] + '）</span><span class="sp-t">' + esc(e.title) + '</span></button>';
         });
         if (!list.length) h = '<div class="sp-note">該当する予定がありません</div>';
         else if (list.length > 200) h += '<div class="sp-note">' + list.length + '件中200件を表示しています</div>';
@@ -2545,7 +2633,7 @@
       document.getElementById("spClose").addEventListener("click", closeSearch);
       sp.addEventListener("click", function(e){ if (e.target === sp) closeSearch(); });
       spIn.addEventListener("input", runSearch);
-      spRes.addEventListener("click", function(e){ var b = e.target.closest(".sp-row"); if (!b) return; closeSearch(); jumpTo(b.getAttribute("data-k")); });
+      spRes.addEventListener("click", function(e){ var b = e.target.closest(".sp-row"); if (!b) return; closeSearch(); jumpTo(b.getAttribute("data-k")); openEdit(b.getAttribute("data-u")); });
       document.getElementById("calPick").addEventListener("click", function(e){
         var sel = document.getElementById("evCal"), box = document.getElementById("calPick");
         if (e.target.closest(".cp-cur")){ var l = box.querySelector(".cp-list"); l.hidden = !l.hidden; return; }
