@@ -326,7 +326,7 @@
 
       /* ---------- Bottom view switcher (Staccal-style) ---------- */
       .toolbar{
-        background:var(--bar-bg); border-radius:12px; padding:5px 4px;
+        background:var(--bar-bg); border-radius:12px; padding:5px 4px; margin:0 10px;
         display:grid; grid-template-columns:repeat(6,1fr);
       }
       .tbtn{
@@ -820,7 +820,7 @@
         calColors: {},
         consented: false,
         templates: [],
-        fx: { noTheme: false, noCover: false, fixedRoot: false, topPad: 0 },
+        fx: { noTheme: false, noCover: false, fixedRoot: false, topPad: 20 },
         detailH: 190,
         clientId: ""
       };
@@ -1512,7 +1512,7 @@
         var f = settings.fx = settings.fx || {}, box = document.getElementById("fxBox");
         var rows = [["noTheme", "テーマ色の指定（theme-color）をやめる"], ["noCover", "画面全体表示（viewport-fit=cover）をやめる"], ["fixedRoot", "画面を固定配置（fixed）にする"]];
         var h = rows.map(function(r){ return '<label class="fx-row"><span>' + r[1] + '</span><input type="checkbox" data-fx="' + r[0] + '"' + (f[r[0]] ? " checked" : "") + '></label>'; }).join("");
-        h += '<label class="fx-row"><span>上端を下げる</span><select data-fx="topPad">' + [0, 16, 32, 52].map(function(v){ return '<option value="' + v + '"' + ((f.topPad || 0) === v ? " selected" : "") + '>' + v + 'pt</option>'; }).join("") + '</select></label>';
+        h += '<label class="fx-row"><span>上端を下げる</span><select data-fx="topPad">' + [0, 16, 20, 24, 32, 52].map(function(v){ return '<option value="' + v + '"' + ((f.topPad || 0) === v ? " selected" : "") + '>' + v + 'pt</option>'; }).join("") + '</select></label>';
         box.innerHTML = h;
       }
       document.addEventListener("change", function(e){
