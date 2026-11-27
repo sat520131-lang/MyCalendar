@@ -3,8 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#c0453e" />
+    <meta name="theme-color" content="#d9534f" />
+    <script>
+      /* set the status-bar color from the saved theme before first paint (same approach as ESCAPE LOG) */
+      try {
+        var _s = JSON.parse(localStorage.getItem("mycal.settings.v1") || "{}");
+        var _p = { red: "#d9534f", blue: "#4a7fb5", dark: "#4a5064" };
+        var _c = _s.themePreset === "custom" ? (_s.customTheme && _s.customTheme.frame) : _p[_s.themePreset || "red"];
+        if (_c) document.querySelector('meta[name="theme-color"]').setAttribute("content", _c);
+      } catch (e) {}
+    </script>
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
