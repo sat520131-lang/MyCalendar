@@ -2,24 +2,24 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#d9534f" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="マイカレンダー" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+    <meta name="theme-color" content="#d9534f" id="themeColor" />
     <script>
       /* set the status-bar color from the saved theme before first paint (same approach as ESCAPE LOG) */
       try {
         var _s = JSON.parse(localStorage.getItem("mycal.settings.v1") || "{}");
         var _p = { red: "#d9534f", blue: "#4a7fb5", dark: "#4a5064" };
         var _c = _s.themePreset === "custom" ? (_s.customTheme && _s.customTheme.frame) : _p[_s.themePreset || "red"];
-        if (_c) document.querySelector('meta[name="theme-color"]').setAttribute("content", _c);
+        if (_c) document.getElementById("themeColor").content = _c;
       } catch (e) {}
     </script>
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="マイカレンダー" />
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
-    <link rel="manifest" href="manifest.webmanifest" />
     <title>マイカレンダー</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
@@ -1507,20 +1507,15 @@
         renderSetCalList();
       }
       var themeMeta = null, lastTheme = "#c0453e";
-      function setThemeColor(v){ lastTheme = v; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", v); }
+      function setThemeColor(v){ lastTheme = v; var m = document.getElementById("themeColor"); if (m) m.content = v; }
       function applyFx(){
         var f = settings.fx || {}, root = document.documentElement;
-        var m = document.querySelector('meta[name="theme-color"]');
-        if (f.noTheme){ if (m){ themeMeta = m; m.remove(); } }
-        else if (!m && themeMeta){ themeMeta.setAttribute("content", lastTheme); document.head.appendChild(themeMeta); }
-        var vp = document.querySelector('meta[name="viewport"]');
-        if (vp) vp.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" + (f.noCover ? "" : ", viewport-fit=cover"));
         root.classList.toggle("fx-fixed", !!f.fixedRoot);
         root.style.setProperty("--fx-top", (f.topPad || 0) + "px");
       }
       function renderFx(){
         var f = settings.fx = settings.fx || {}, box = document.getElementById("fxBox");
-        var rows = [["noTheme", "テーマ色の指定（theme-color）をやめる"], ["noCover", "画面全体表示（viewport-fit=cover）をやめる"], ["fixedRoot", "画面を固定配置（fixed）にする"]];
+        var rows = [["fixedRoot", "画面を固定配置（fixed）にする"]];
         var h = rows.map(function(r){ return '<label class="fx-row"><span>' + r[1] + '</span><input type="checkbox" data-fx="' + r[0] + '"' + (f[r[0]] ? " checked" : "") + '></label>'; }).join("");
         h += '<label class="fx-row"><span>上端を下げる</span><select data-fx="topPad">' + [0, 16, 20, 24, 32, 52].map(function(v){ return '<option value="' + v + '"' + ((f.topPad || 0) === v ? " selected" : "") + '>' + v + 'pt</option>'; }).join("") + '</select></label>';
         box.innerHTML = h;
