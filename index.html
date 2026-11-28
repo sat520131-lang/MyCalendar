@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#c0453e" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -16,6 +16,7 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
       button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2rem; }
+      [role="button"][tabindex]:focus-visible{ outline:2px solid var(--theme); outline-offset:-2px; }
 
       :root{
         --theme:#d9534f;
@@ -902,6 +903,20 @@
       var RANGE_START = new Date(TODAY.getFullYear(), TODAY.getMonth()-6, 1);
       var RANGE_MONTHS = 25;
       var RANGE_END = new Date(RANGE_START.getFullYear(), RANGE_START.getMonth()+RANGE_MONTHS, 0);
+      /* P0-1: keep navigation inside the synced range so events never appear to vanish */
+      function clampDay(d){
+        var k = key(d);
+        if (k < key(RANGE_START)) return new Date(RANGE_START.getFullYear(), RANGE_START.getMonth(), RANGE_START.getDate());
+        if (k > key(RANGE_END)) return new Date(RANGE_END.getFullYear(), RANGE_END.getMonth(), RANGE_END.getDate());
+        return d;
+      }
+      function clampMonth(m){
+        var first = new Date(RANGE_START.getFullYear(), RANGE_START.getMonth(), 1);
+        var last = new Date(RANGE_END.getFullYear(), RANGE_END.getMonth(), 1);
+        if (m < first) return new Date(first);
+        if (m > last) return new Date(last);
+        return m;
+      }
 
       var selected = new Date(TODAY);
       var currentView = "month";
@@ -1623,7 +1638,7 @@
         var k = key(d), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var cls = "cell " + dowClass(d) + (inMonth ? "" : " dim") + (hol ? " is-hol" : "")
           + (k===key(TODAY) ? " is-today" : "") + (k===key(selected) ? " is-sel" : "");
-        var h = '<div class="'+cls+'" data-date="'+k+'" role="button" aria-label="'+(d.getMonth()+1)+'月'+d.getDate()+'日">'
+        var h = '<div class="'+cls+'" data-date="'+k+'" role="button" tabindex="0" aria-label="'+(d.getMonth()+1)+'月'+d.getDate()+'日">'
           + '<span class="dnum">'+d.getDate()+'</span>';
         if (hol) h += '<span class="hol">'+hol+'</span>';
         if (rok && !hol) h += '<span class="rok'+(rok==="大安"?" good":"")+'">'+rok+'</span>';
@@ -1695,7 +1710,7 @@
           var days = new Date(base.getFullYear(), base.getMonth()+1, 0).getDate();
           for (var dd=1; dd<=days; dd++){
             var d = new Date(base.getFullYear(), base.getMonth(), dd), k = key(d), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
-            h += '<div class="dayrow '+dowClass(d)+(hol?" is-hol":"")+(k===key(TODAY)?" is-today":"")+'" data-date="'+k+'" role="button">'
+            h += '<div class="dayrow '+dowClass(d)+(hol?" is-hol":"")+(k===key(TODAY)?" is-today":"")+'" data-date="'+k+'" role="button" tabindex="0">'
               + '<div class="dcol"><b>'+dd+'</b><span>'+DOW[d.getDay()]+'</span></div><div class="ecol">';
             if (hol) h += '<div class="l-ev" style="color:var(--sun)"><span>'+hol+'（祝日）</span></div>';
             if (rok) h += '<div class="l-ev" style="color:var(--ink-2)"><span>六曜：'+rok+'</span></div>';
@@ -1717,8 +1732,8 @@
           + '<b>'+y+'年 '+(m+1)+'月</b>'
           + '<button class="hbtn" id="stdNext" aria-label="次の月"><svg viewBox="0 0 24 24"><path d="M9.5 5.5L16 12l-6.5 6.5"/></svg></button></div>'
           + monthGridHTML(y, m, true);
-        document.getElementById("stdPrev").addEventListener("click", function(){ slideTo(-1, function(){ stdCursor = new Date(y, m-1, 1); renderMonth(); syncTitle(); }); });
-        document.getElementById("stdNext").addEventListener("click", function(){ slideTo(1, function(){ stdCursor = new Date(y, m+1, 1); renderMonth(); syncTitle(); }); });
+        document.getElementById("stdPrev").addEventListener("click", function(){ slideTo(-1, function(){ stdCursor = clampMonth(new Date(y, m-1, 1)); renderMonth(); syncTitle(); }); });
+        document.getElementById("stdNext").addEventListener("click", function(){ slideTo(1, function(){ stdCursor = clampMonth(new Date(y, m+1, 1)); renderMonth(); syncTitle(); }); });
       }
       function wkNavHTML(s){
         var e = new Date(s); e.setDate(e.getDate()+6);
@@ -1748,11 +1763,11 @@
         var s = weekStartOf(selected), h = '<div class="wk-sticky">' + wkNavHTML(s) + '<div class="week-head wg">', first = 1440, tcols = "", allRow = "";
         for (var i = 0; i < 7; i++){
           var d = new Date(s.getFullYear(), s.getMonth(), s.getDate()+i), k = key(d);
-          h += '<div class="wh '+dowClass(d)+(holOf(k)?" is-hol":"")+(k===key(TODAY)?" is-today":"")+(k===key(selected)?" is-sel":"")+'" data-date="'+k+'" role="button"><span>'+DOW[d.getDay()]+'</span><b>'+d.getDate()+'</b></div>';
+          h += '<div class="wh '+dowClass(d)+(holOf(k)?" is-hol":"")+(k===key(TODAY)?" is-today":"")+(k===key(selected)?" is-sel":"")+'" data-date="'+k+'" role="button" tabindex="0"><span>'+DOW[d.getDay()]+'</span><b>'+d.getDate()+'</b></div>';
         }
         for (var j = 0; j < 7; j++){
           var kk = key(new Date(s.getFullYear(), s.getMonth(), s.getDate()+j)), evs = evsOn(kk), tm = [];
-          allRow += '<div class="wcol wall' + (kk === key(selected) ? ' is-sel' : '') + '" data-date="'+kk+'" role="button">';
+          allRow += '<div class="wcol wall' + (kk === key(selected) ? ' is-sel' : '') + '" data-date="'+kk+'" role="button" tabindex="0">';
           if (holOf(kk)) allRow += '<div class="w-ev" style="background:var(--sun);color:#fff">'+holOf(kk)+'</div>';
           var ad = 0, cap = holOf(kk) ? 1 : 2, adAll = evs.filter(function(e){ return e.allDay; }).length;
           evs.forEach(function(e){
@@ -1764,7 +1779,7 @@
           allRow += '</div>';
           var its = layoutTimed(kk, tm);
           if (its.length) first = Math.min(first, its[0].s);
-          tcols += '<div class="wcol wt' + (kk === key(selected) ? ' is-sel' : '') + '" data-date="'+kk+'" role="button">';
+          tcols += '<div class="wcol wt' + (kk === key(selected) ? ' is-sel' : '') + '" data-date="'+kk+'" role="button" tabindex="0">';
           its.forEach(function(o){
             var e = o.e;
             tcols += '<div class="w-ev" data-ev="'+esc(e.uid)+'" style="top:'+(o.s*HW/60)+'px;height:'+Math.max(16,(o.en-o.s)*HW/60-1)+'px;left:calc(100% * '+o.c+' / '+o.n+');width:calc(100% / '+o.n+' - 1px);background:'+e.color+';color:'+fg(e.color)+'">'+(o.n > 1 || e.startKey < kk ? "" : '<time>'+e.startTime+'</time>')+esc(e.title)+'</div>';
@@ -1783,7 +1798,7 @@
         var k = key(d), evs = evsOn(k), hol = holOf(k), rok = rokOf(k);
         var weekend = d.getDay()===0 || d.getDay()===6;
         var h = '<div class="wk-card '+dowClass(d)+(hol?" is-hol":"")+(k===key(TODAY)?" is-today":"")+(k===key(selected)?" is-sel":"")
-          + '" data-date="'+k+'" role="button" style="flex:'+(weekend?weW:wdW)+' 1 0px">'
+          + '" data-date="'+k+'" role="button" tabindex="0" style="flex:'+(weekend?weW:wdW)+' 1 0px">'
           + '<div class="wk-head"><span class="wk-num">'+d.getDate()+'</span><span class="wk-dow">'+DOW[d.getDay()]+'</span>'
           + (hol ? '<span class="wk-hol">'+hol+'</span>' : '')
           + (rok ? '<span class="wk-rok">'+rok+'</span>' : '') + '</div><div class="wk-evs">';
@@ -1862,12 +1877,12 @@
         sorted.forEach(function(e){
           if (q){
             if ((e.title + " " + (e.location||"") + " " + (e.description||"")).toLowerCase().indexOf(q) === -1) return;
-          } else if (e.startKey < fromKey) return;
+          } else if (e.startKey < fromKey && addDays(e.endKeyExcl, -1) < fromKey) return;
           total++;
           if (shown >= 600) return;
           var d = e.startDateObj, ym = d.getFullYear()+"年"+(d.getMonth()+1)+"月";
           if (ym !== lastMonth){ h += '<div class="month-label" data-ym="'+d.getFullYear()+'-'+d.getMonth()+'">'+(d.getMonth()+1)+'月<small>'+d.getFullYear()+'年</small></div>'; lastMonth = ym; }
-          h += '<div class="dayrow '+dowClass(d)+'" data-date="'+e.startKey+'" role="button"><div class="dcol"><b>'+d.getDate()+'</b><span>'+DOW[d.getDay()]+'</span></div>'
+          h += '<div class="dayrow '+dowClass(d)+'" data-date="'+e.startKey+'" role="button" tabindex="0"><div class="dcol"><b>'+d.getDate()+'</b><span>'+DOW[d.getDay()]+'</span></div>'
              + '<div class="ecol"><div class="sw"><span class="sw-bg" aria-hidden="true">削除</span><div class="l-ev" data-ev="'+esc(e.uid)+'" role="button" title="ダブルタップで編集"><i style="background:'+e.color+'"></i><time>'+e.timeLabel+'</time><span>'+esc(e.title)+'</span></div></div></div></div>';
           shown++;
         });
@@ -1958,7 +1973,7 @@
         if (Date.now() < suppressClickUntil) return;
         var wkBtn = e.target.closest("[data-wkshift]");
         if (wkBtn){
-          selected.setDate(selected.getDate() + 7 * parseInt(wkBtn.getAttribute("data-wkshift"), 10));
+          selected = clampDay(new Date(selected.getFullYear(), selected.getMonth(), selected.getDate() + 7 * parseInt(wkBtn.getAttribute("data-wkshift"), 10)));
           slideTo(parseInt(wkBtn.getAttribute("data-wkshift"), 10), function(){ renderWeek(); renderWeekCards(); markSelected(); showDetail(key(selected)); syncTitle(); });
           return;
         }
@@ -1966,6 +1981,16 @@
         if (evEl){ openEdit(evEl.getAttribute("data-ev")); return; }
         var t = e.target.closest("[data-date]");
         if (!t) return;
+        selected = parseKey(t.getAttribute("data-date")); detailArmed = true;
+        markSelected(); renderWeek(); renderWeekCards(); renderDay(); showDetail(key(selected)); syncTitle();
+      });
+
+      /* P0-4: make date cells operable with Enter / Space (keyboard & screen readers) */
+      stage.addEventListener("keydown", function(e){
+        if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+        var t = e.target.closest ? e.target.closest('[data-date][role="button"]') : null;
+        if (!t) return;
+        e.preventDefault();
         selected = parseKey(t.getAttribute("data-date")); detailArmed = true;
         markSelected(); renderWeek(); renderWeekCards(); renderDay(); showDetail(key(selected)); syncTitle();
       });
@@ -2172,13 +2197,14 @@
         if (!(currentView === "month" || isWeekType(currentView) || currentView === "day")) return;
         slideTo(dir, function(){
           if (currentView === "month"){
-            stdCursor = new Date(stdCursor.getFullYear(), stdCursor.getMonth() + dir, 1);
+            stdCursor = clampMonth(new Date(stdCursor.getFullYear(), stdCursor.getMonth() + dir, 1));
             renderMonth(); syncTitle();
           } else if (isWeekType(currentView)){
-            selected.setDate(selected.getDate() + 7 * dir);
+            selected = clampDay(new Date(selected.getFullYear(), selected.getMonth(), selected.getDate() + 7 * dir));
             renderWeek(); renderWeekCards(); markSelected(); showDetail(key(selected)); syncTitle();
           } else {
-            selected.setDate(selected.getDate() + dir); stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1);
+            selected = clampDay(new Date(selected.getFullYear(), selected.getMonth(), selected.getDate() + dir));
+            stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1);
             renderWeek(); renderWeekCards(); renderDay(); markSelected(); showDetail(key(selected)); syncTitle();
           }
         });
@@ -2651,7 +2677,6 @@
       grip.addEventListener("pointerup", endGrip); grip.addEventListener("pointercancel", endGrip);
       document.addEventListener("gesturestart", function(e){ e.preventDefault(); });
       document.addEventListener("gesturechange", function(e){ e.preventDefault(); });
-      document.addEventListener("touchmove", function(e){ if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
       var sp = document.getElementById("searchPanel"), spIn = document.getElementById("spInput"), spRes = document.getElementById("spResults");
       function runSearch(){
         var q = spIn.value.trim().toLowerCase(), h = "";
@@ -2710,7 +2735,7 @@
       ymTitle.addEventListener("click", function(){ jump.value = key(selected); try { jump.showPicker(); } catch(e){ jump.focus(); jump.click(); } });
       jump.addEventListener("change", function(){
         if (!jump.value) return;
-        selected = parseKey(jump.value); stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1);
+        selected = clampDay(parseKey(jump.value)); stdCursor = new Date(selected.getFullYear(), selected.getMonth(), 1);
         renderAll(); observeLabels(); markSelected(); showDetail(key(selected)); syncTitle();
         if (currentView === "vgrid" || currentView === "vlist") scrollToToday(true, jump.value);
       });
