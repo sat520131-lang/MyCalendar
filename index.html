@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#c0453e" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://www.googleapis.com https://accounts.google.com; frame-src https://accounts.google.com; base-uri 'self'; form-action 'none'" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="マイカレンダー" />
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
-    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAESklEQVR4nO3cO24cRxSG0RpCoQFnhkPDiXchKhG34UyL0lKsRNQSnBhODIeGNyEHBgWKIufVj3u7/3NiYabZdb+umgGpwyj28e3rz9XXQJ03Hz4dKt9/9Tc38ByzdhCrvJmh5xprxLDoGxh85rBkCIu8sMFnCUuEMOsLGnzWMGcIs7yQwafCHCHcTH0Bw0+VOWZvUgCGn2pTZ/CqLcTg09E1R6KLdwDDT1fXzOZFARh+urt0Rs8OwPCzFZfM6lkBGH625tyZnfw1KGzZyQA8/dmqc2b3aACGn607NcMvBmD42Ytjs+wzANGeDcDTn715aabtAET7JgBPf/bqudm2AxDtqwA8/dm7pzNuByDalwA8/UnxeNbtAEQTANFuxnD8Ic/DzNsBiCYAogmAaAfnf5LZAYgmAKIJgGivqi9gbe///Ovkv3n3y88rXEmN9J//KTsA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEG0zvwv09z//7vK9Oprr5//pxx9meZ0ltQ4gfRC37vH6dY2h7RHI8O9L1/VsGUDXm8U0Hde1XQAdbxLz6ba+rQLodnNYRqd1bhNAp5vC8rqsd4sAutwM1tVh3VsEAFUEQLTyADpsg9SpXv/yAKCSAIgmAKIJgGgCIFrrX4dewt3331VfQqn0n/8pOwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARCt/O8Bfv39j+pLoNj93W3Ze9sBiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKKVB3B/d1t9CRSqXv/yAKCSAIjWIoDqbZAaHda9RQBj9LgZrKfLercJYIw+N4VldVrnVgGM0evmML9u69sugDH63STm0XFdWwYwRs+bxfW6rudhjDE+vn39ufpCTrn97b76ErhQ16F/8ObDp8Or6os4V/ebyTa1PQLBGgRAtJsx/j8LVV8IrOlh5u0ARBMA0b4E4BhEisezbgcg2lcB2AXYu6czbgcg2jcB2AXYq+dm2w5AtGcDsAuwNy/NtB2AaC8GYBdgL47N8tEdQARs3akZPnkEEgFbdc7s+gxAtLMCsAuwNefO7Nk7gAjYiktm9aIjkAjo7tIZvfgzgAjo6prZnDTMW/jvVNi/KQ/lSd8C2Q2oNnUGJ38NKgKqzDF7sw6vIxFrmPOhu8jTWwgsYYnTxqLHFyEwhyWP2auc34XANdb4fLn6B1gxcMzaX6qUf4MjiGzV3yL+BytxB8nqkFMgAAAAAElFTkSuQmCC" />
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAD8klEQVR4nO3cMW4USRiG4RqLEIkMbYg22VtgEnyNzTgUR4EEcwSS1SaIEHEJNlgNGmDG7pmu7r/6m+dJLXX3dL3+Xd22vGuFPrx++b3y/Czj1fuPu6pzr3Zi8V63tSJf9CQi5pgl417kwEJmiiXC7npAIXOJnmF3OZCQ6aFH2DdzDyBmeunR0qygxUxvc5u6aMQLmTVcsgU5e0KLmbVc0tpZQYuZtZ3b3OSgxUyVc9qbFLSYqTa1wUeDFjOjmNLi7PfQMJIHgzadGc1jTZ4MWsyM6qE2jwYtZkZ3qlF7aKL8FrTpzFYca9WEJspPQZvObM2vzZrQRPkRtOnMVh22a0ITRdBEuWnNdoPt2zdsQhNF0EQRNFEETZSdB0KSmNBEETRRnlRfwBre/vv55Nfe/PXnileyjmv7vIdMaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJooQ//q+8vXbxHnGEmvz/vij+ddjtPbkEFfW2RbtF+j0cIeKmghb89oYQ+zhxbzto2yfkMEPcrNYJ4R1rE86BFuAv1Ur2d50NBTadDV380so3JdTWiilAVtOmerWl8TmiiCJoqgiSJoogiaKEP9cdJS7p49rb6EVV3b5z1kQhNF0EQRNFEETRRBE0XQRBE0UQRNFEETRdBEETRRBE0UQRNF0EQp+/PRvz/9U3VqVnJ/d7v6OU1oogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJooZUHf391WnZoVVK2vCU2U0qBN6UyV62pCE6U8aFM6S/V6lgfdWv1NoI8R1nGIoFsb42ZwuVHWb9daax9ev/xefSGHbt/dV18CE40ScmutvXr/cfek+iKO2d8kYY9rpJAPDRn03qg3jXENs4eGHgRNlJvW/t9MV18IzLFv2IQmiqCJ8iNo2w626rBdE5ooPwVtSrM1vzZrQhPlt6BNabbiWKsmNFGOBm1KM7pTjZ6c0KJmVA+1+eCWQ9SM5rEm7aGJ8mjQpjSjmNLipAktaqpNbXDylkPUVDmnvbP20KJmbec2d/ZDoahZyyWtzYpztH9/QIY5Q3PWazvTmt7mNjX7PbSo6aVHS11jtAXhEj2H4iLTVdhMscRP90W3C8LmmCW3qavtf8V93dZ61ip9oBN5psoXBf8BYRX5wC9qMrIAAAAASUVORK5CYII=" />
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%20%22%E3%83%9E%E3%82%A4%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%22%2C%20%22short_name%22%3A%20%22%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%22%2C%20%22lang%22%3A%20%22ja%22%2C%20%22display%22%3A%20%22standalone%22%2C%20%22start_url%22%3A%20%22.%2F%22%2C%20%22scope%22%3A%20%22.%2F%22%2C%20%22background_color%22%3A%20%22%23c0453e%22%2C%20%22theme_color%22%3A%20%22%23c0453e%22%2C%20%22icons%22%3A%20%5B%7B%22src%22%3A%20%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAESklEQVR4nO3cO24cRxSG0RpCoQFnhkPDiXchKhG34UyL0lKsRNQSnBhODIeGNyEHBgWKIufVj3u7%2F3NiYabZdb%2BumgGpwyj28e3rz9XXQJ03Hz4dKt9%2F9Tc38ByzdhCrvJmh5xprxLDoGxh85rBkCIu8sMFnCUuEMOsLGnzWMGcIs7yQwafCHCHcTH0Bw0%2BVOWZvUgCGn2pTZ%2FCqLcTg09E1R6KLdwDDT1fXzOZFARh%2Burt0Rs8OwPCzFZfM6lkBGH625tyZnfw1KGzZyQA8%2Fdmqc2b3aACGn607NcMvBmD42Ytjs%2BwzANGeDcDTn715aabtAET7JgBPf%2Fbqudm2AxDtqwA8%2Fdm7pzNuByDalwA8%2FUnxeNbtAEQTANFuxnD8Ic%2FDzNsBiCYAogmAaAfnf5LZAYgmAKIJgGivqi9gbe%2F%2F%2FOvkv3n3y88rXEmN9J%2F%2FKTsA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEG0zvwv09z%2F%2F7vK9Oprr5%2F%2Fpxx9meZ0ltQ4gfRC37vH6dY2h7RHI8O9L1%2FVsGUDXm8U0Hde1XQAdbxLz6ba%2BrQLodnNYRqd1bhNAp5vC8rqsd4sAutwM1tVh3VsEAFUEQLTyADpsg9SpXv%2FyAKCSAIgmAKIJgGgCIFrrX4dewt3331VfQqn0n%2F8pOwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARCt%2FO8Bfv39j%2BpLoNj93W3Ze9sBiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKKVB3B%2Fd1t9CRSqXv%2FyAKCSAIjWIoDqbZAaHda9RQBj9LgZrKfLercJYIw%2BN4VldVrnVgGM0evmML9u69sugDH63STm0XFdWwYwRs%2BbxfW6rudhjDE%2Bvn39ufpCTrn97b76ErhQ16F%2F8ObDp8Or6os4V%2FebyTa1PQLBGgRAtJsx%2Fj8LVV8IrOlh5u0ARBMA0b4E4BhEisezbgcg2lcB2AXYu6czbgcg2jcB2AXYq%2Bdm2w5AtGcDsAuwNy%2FNtB2AaC8GYBdgL47N8tEdQARs3akZPnkEEgFbdc7s%2BgxAtLMCsAuwNefO7Nk7gAjYiktm9aIjkAjo7tIZvfgzgAjo6prZnDTMW%2FjvVNi%2FKQ%2FlSd8C2Q2oNnUGJ38NKgKqzDF7sw6vIxFrmPOhu8jTWwgsYYnTxqLHFyEwhyWP2auc34XANdb4fLn6B1gxcMzaX6qUf4MjiGzV3yL%2BBytxB8nqkFMgAAAAAElFTkSuQmCC%22%2C%20%22sizes%22%3A%20%22192x192%22%2C%20%22type%22%3A%20%22image%2Fpng%22%2C%20%22purpose%22%3A%20%22any%22%7D%2C%20%7B%22src%22%3A%20%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAD8klEQVR4nO3cMW4USRiG4RqLEIkMbYg22VtgEnyNzTgUR4EEcwSS1SaIEHEJNlgNGmDG7pmu7r%2F6m%2BdJLXX3dL3%2BXd22vGuFPrx%2B%2Bb3y%2FCzj1fuPu6pzr3Zi8V63tSJf9CQi5pgl417kwEJmiiXC7npAIXOJnmF3OZCQ6aFH2DdzDyBmeunR0qygxUxvc5u6aMQLmTVcsgU5e0KLmbVc0tpZQYuZtZ3b3OSgxUyVc9qbFLSYqTa1wUeDFjOjmNLi7PfQMJIHgzadGc1jTZ4MWsyM6qE2jwYtZkZ3qlF7aKL8FrTpzFYca9WEJspPQZvObM2vzZrQRPkRtOnMVh22a0ITRdBEuWnNdoPt2zdsQhNF0EQRNFEETZSdB0KSmNBEETRRnlRfwBre%2Fvv55Nfe%2FPXnileyjmv7vIdMaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJooQ%2F%2Fq%2B8vXbxHnGEmvz%2Fvij%2BddjtPbkEFfW2RbtF%2Bj0cIeKmghb89oYQ%2Bzhxbzto2yfkMEPcrNYJ4R1rE86BFuAv1Ur2d50NBTadDV380so3JdTWiilAVtOmerWl8TmiiCJoqgiSJoogiaKEP9cdJS7p49rb6EVV3b5z1kQhNF0EQRNFEETRRBE0XQRBE0UQRNFEETRdBEETRRBE0UQRNF0EQp%2B%2FPRvz%2F9U3VqVnJ%2Fd7v6OU1oogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJooZUHf391WnZoVVK2vCU2U0qBN6UyV62pCE6U8aFM6S%2FV6lgfdWv1NoI8R1nGIoFsb42ZwuVHWb9daax9ev%2FxefSGHbt%2FdV18CE40ScmutvXr%2Fcfek%2BiKO2d8kYY9rpJAPDRn03qg3jXENs4eGHgRNlJvW%2Ft9MV18IzLFv2IQmiqCJ8iNo2w626rBdE5ooPwVtSrM1vzZrQhPlt6BNabbiWKsmNFGOBm1KM7pTjZ6c0KJmVA%2B1%2BeCWQ9SM5rEm7aGJ8mjQpjSjmNLipAktaqpNbXDylkPUVDmnvbP20KJmbec2d%2FZDoahZyyWtzYpztH9%2FQIY5Q3PWazvTmt7mNjX7PbSo6aVHS11jtAXhEj2H4iLTVdhMscRP90W3C8LmmCW3qavtf8V93dZ61ip9oBN5psoXBf8BYRX5wC9qMrIAAAAASUVORK5CYII%3D%22%2C%20%22sizes%22%3A%20%22180x180%22%2C%20%22type%22%3A%20%22image%2Fpng%22%2C%20%22purpose%22%3A%20%22any%22%7D%5D%7D" />
     <title>マイカレンダー</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
@@ -44,7 +45,7 @@
         font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
         color:var(--ink);
         display:flex; justify-content:center;
-        position:relative; height:100dvh; width:100%;
+        position:relative; height:100vh; height:100dvh; width:100%;
       }
 
       /* ---------- App frame : theme background + paper refill sheet ---------- */
@@ -136,8 +137,8 @@
       .cell .rok{ font-size:10px; letter-spacing:-.03em; color:var(--ink-2); display:block; margin-top:1px; white-space:nowrap; overflow:hidden; }
       .cell .rok.good{ color:var(--sun); }
       .cell.is-today .dnum{ background:var(--today); color:#fff; border-radius:50%; font-weight:700; }
-      .cell.is-sel{ background:color-mix(in srgb, var(--theme) 10%, transparent); border-radius:6px; box-shadow:inset 0 0 0 1.5px var(--theme); }
-      .cell.drop-hint, .wcol.drop-hint, .wk-card.drop-hint{ box-shadow:inset 0 0 0 2px var(--theme); background:color-mix(in srgb, var(--theme) 12%, transparent); }
+      .cell.is-sel{ background:var(--sheet-2); background:color-mix(in srgb, var(--theme) 10%, transparent); border-radius:6px; box-shadow:inset 0 0 0 1.5px var(--theme); }
+      .cell.drop-hint, .wcol.drop-hint, .wk-card.drop-hint{ box-shadow:inset 0 0 0 2px var(--theme); background:var(--sheet-2); background:color-mix(in srgb, var(--theme) 12%, transparent); }
       .ev{
         display:block; margin-top:2px; font-size:11px; line-height:1.4; padding:0 3px; border-radius:3px;
         color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:500;
@@ -147,7 +148,7 @@
       .ev.ph{ visibility:hidden; }
       .cell .ev{ font-size:9.5px; padding:0 1px; letter-spacing:-.02em; }
       .std-grid{ flex:1; min-height:0; grid-template-rows:repeat(6, minmax(0,1fr)); padding-bottom:4px; }
-      .wcol.is-sel{ background:color-mix(in srgb, var(--theme) 9%, transparent); }
+      .wcol.is-sel{ background:var(--sheet-2); background:color-mix(in srgb, var(--theme) 9%, transparent); }
       .wk-sticky, .dy-sticky{ position:sticky; top:0; z-index:6; background:var(--sheet); }
       .dy-sticky{ border-bottom:1px solid var(--line-soft); }
       .wall .w-ev, .wt .w-ev{ white-space:nowrap; text-overflow:ellipsis; }
@@ -263,7 +264,7 @@
         border:1px solid var(--line); border-radius:10px; background:var(--sheet);
         padding:6px 8px; overflow:hidden; cursor:pointer; display:flex; flex-direction:column; min-height:0;
       }
-      .wk-card.is-sel{ box-shadow:inset 0 0 0 1.5px var(--theme); background:color-mix(in srgb, var(--theme) 7%, var(--sheet)); }
+      .wk-card.is-sel{ box-shadow:inset 0 0 0 1.5px var(--theme); background:var(--sheet); background:color-mix(in srgb, var(--theme) 7%, var(--sheet)); }
       .wk-head{ display:flex; align-items:baseline; gap:6px; flex:none; }
       .wk-num{ font-size:20px; font-weight:700; line-height:1.05; }
       .wk-card.sun .wk-num,.wk-card.sun .wk-dow{ color:var(--sun); }
@@ -345,7 +346,7 @@
         position:fixed; z-index:31; left:50%; transform:translate(-50%,0); bottom:calc(14px + env(safe-area-inset-bottom));
         width:min(430px, calc(100vw - 24px)); max-width:calc(100vw - 24px); background:var(--sheet); color:var(--ink); border-radius:16px;
         box-shadow:var(--shadow); padding:16px; display:none;
-        max-height:82dvh; overflow-y:auto; overflow-x:hidden;
+        max-height:82vh; max-height:82dvh; overflow-y:auto; overflow-x:hidden;
       }
       @media (max-width:400px){
         .popover{ padding:14px 12px; }
@@ -448,7 +449,6 @@
       }
       .view-prev svg{ width:48px; height:34px; display:block; }
       .drop-msg{ font-size:13px; color:var(--ink-2); line-height:1.6; margin:2px 0 4px; }
-      /* ---- round 3 overrides ---- */
       .cell{ padding:3px 2px 4px; }
       .grid{ padding:0 3px; }
       .cell .ev{ font-size:9px; padding:0 1px; letter-spacing:-.03em; text-overflow:clip; }
@@ -457,7 +457,7 @@
       .wcol.wall{ overflow:hidden; }
       .wt .w-ev{ text-overflow:clip; }
       .w-ev.more{ background:transparent !important; color:var(--ink-2) !important; text-align:center; padding:0; }
-      .popover{ padding:12px; max-height:94dvh; }
+      .popover{ padding:12px; max-height:94vh; max-height:94dvh; }
       .popover h3.pop-title{ margin:0 0 2px; }
       form.ev-form label{ margin:7px 0 2px; font-size:11px; }
       form.ev-form label.checkline{ margin:6px 0 0; }
@@ -475,7 +475,6 @@
       .sp-res{ flex:0 1 auto; min-height:0; }
       .sp-row{ padding:8px 12px; }
       .sp-note{ padding:10px 14px; }
-      /* ---- round 4 ---- */
       html, body, .app{ touch-action:pan-x pan-y; }
       .detail, .detail.open{ max-height:none; transition:none; overflow:visible; }
       .detail{ display:none; flex:none; height:var(--detail-h, 190px); flex-direction:column; border-top:1px solid var(--line-soft); background:var(--sheet); }
@@ -483,21 +482,13 @@
       .detail-grip{ flex:none; height:22px; display:flex; align-items:center; justify-content:center; touch-action:none; cursor:row-resize; }
       .detail-grip span{ width:40px; height:4px; border-radius:2px; background:var(--ink-3); opacity:.55; }
       .detail-in{ flex:1; min-height:0; overflow-y:auto; padding:0 14px 10px; -webkit-overflow-scrolling:touch; }
-      /* ---- round 5 ---- */
       .scrim{ visibility:hidden; transition:opacity .2s, visibility 0s linear .2s; }
       .scrim.show{ visibility:visible; transition:opacity .2s; }
       .cell .hol, .cell .rok{ height:13px; line-height:13px; }
-      .popover.center{ top:50%; bottom:auto; transform:translate(-50%,-50%); max-height:88dvh; }
+      .popover.center{ top:50%; bottom:auto; transform:translate(-50%,-50%); max-height:88vh; max-height:88dvh; }
       .popover.center.show{ animation:pop-in-c .22s ease; }
       @keyframes pop-in-c{ from{ opacity:0; transform:translate(-50%,-46%); } to{ opacity:1; transform:translate(-50%,-50%); } }
-      .popover.small{ width:min(340px, calc(100vw - 48px)); max-height:70dvh; padding:10px 12px; }
-      /* ---- round 6: blur diagnostics ---- */
-      .app{ padding-top:calc(env(safe-area-inset-top, 0px) + var(--fx-top, 0px)); }
-      html.fx-fixed body{ position:fixed; inset:0; height:auto; }
-      .fx-row{ display:flex; align-items:center; gap:10px; padding:7px 2px; border-top:1px solid var(--line-soft); font-size:13px; }
-      .fx-row span{ flex:1; }
-      .fx-row input[type="checkbox"]{ width:22px; height:22px; flex:none; min-height:0; }
-      .fx-row select{ min-height:32px; font-size:14px; }
+      .popover.small{ width:min(340px, calc(100vw - 48px)); max-height:70vh; max-height:70dvh; padding:10px 12px; }
     </style>
   </head>
   <body>
@@ -618,9 +609,6 @@
         <div class="pal-note">四角いチップはGoogleカレンダー側の色です。色はこのアプリ内の表示にだけ使われ、Googleカレンダーは変わりません。</div>
       </div>
 
-      <h4>上部のぼけ診断（試験用）</h4>
-      <div class="pal-note">切り替えるたびにすぐ反映されます。ぼけが消えた設定を教えてください。</div>
-      <div id="fxBox"></div>
 
       <h4>同期する期間</h4>
       <div class="set-row" style="border-top:0">
@@ -633,11 +621,8 @@
 
       <h4>ジェスチャー</h4>
       <label class="set-check"><input type="checkbox" id="gestDragChk" /><span class="grow">予定を長押しドラッグして移動・コピー</span></label>
-      <label style="display:none" class="set-check"><input type="checkbox" id="gestLongChk" /><span class="grow">日を長押しして予定を追加</span></label>
       <label class="set-check"><input type="checkbox" id="gestDblChk" /><span class="grow">日をダブルタップで予定を追加</span></label>
-      <label style="display:none" class="set-check"><input type="checkbox" id="gestSwipeDelChk" /><span class="grow">リストで予定を横スワイプして削除</span></label>
       <label class="set-check"><input type="checkbox" id="gestSwipeNavChk" /><span class="grow">左右スワイプで前後の期間へ（月：前月・翌月／週：前週・翌週）</span></label>
-      <label style="display:none" class="set-check"><input type="checkbox" id="gestTwoFingerChk" /><span class="grow">2本指スワイプでビューを切り替え（左へ：次のビュー／右へ：前のビュー）</span></label>
 
       <h4>カレンダーごとの色</h4>
       <p class="home-note" style="margin-top:2px">予定の色はStaccal 2風パレットから自動で割り当てられます。変えたいときは「Google連携・カレンダーの色」からカレンダーごとに選べます。</p>
@@ -664,6 +649,7 @@
         <div class="form-row">
           <div><label for="evLoc">場所</label><input id="evLoc" type="text" autocomplete="off" /></div>
           <div><label for="evAlert">通知</label><select id="evAlert"></select></div>
+          <div class="pal-note" style="margin-top:2px">通知はGoogleカレンダー側で鳴ります（端末内保存の予定は通知されません）。</div>
         </div>
         <label for="evDesc">メモ</label>
         <textarea id="evDesc"></textarea>
@@ -699,6 +685,11 @@
       function key(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
       function parseKey(k){ var p=k.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
       function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+      /* P2-13: 旧ブラウザ向けCSS.escapeフォールバック */
+      if (!(window.CSS && CSS.escape)){
+        window.CSS = window.CSS || {};
+        CSS.escape = function(s){ return String(s).replace(/[^a-zA-Z0-9_\u0080-\uFFFF-]/g, function(c){ return "\\" + c; }); };
+      }
       var DOW = ["日","月","火","水","木","金","土"];
       function dowClass(d){ return d.getDay()===0 ? "sun" : d.getDay()===6 ? "sat" : ""; }
       var TODAY = new Date(); TODAY.setHours(0,0,0,0);
@@ -766,7 +757,8 @@
           try {
             var parts = lunarFmt.formatToParts(parseKey(k)), lm = 0, ld = 0;
             for (var i=0;i<parts.length;i++){
-              if (parts[i].type === "month") lm = parseInt(parts[i].value, 10);
+              /* P2-16: 閏月(bis)は翌月として数える（(旧暦月+日)%6簡略式の概算補正） */
+              if (parts[i].type === "month") lm = parseInt(parts[i].value, 10) + (/bis|intercalary/i.test(parts[i].value) ? 1 : 0);
               if (parts[i].type === "day") ld = parseInt(parts[i].value, 10);
             }
             if (lm && ld) name = ROKUYO_NAMES[(lm + ld) % 6];
@@ -975,7 +967,7 @@
         dayIdx = {}; idxDirty = false;
         events.forEach(function(e){
           var d = parseKey(e.startKey);
-          for (var n = 0; n < 400; n++){
+          for (var n = 0; n < 3650; n++){ /* P1-6: 400日打ち切りを撤廃（安全上限は10年） */
             var k = key(d); if (k >= e.endKeyExcl) break;
             (dayIdx[k] = dayIdx[k] || []).push(e);
             d.setDate(d.getDate() + 1);
@@ -1034,7 +1026,7 @@
         }
         tokenClient = google.accounts.oauth2.initTokenClient({
           client_id: clientId,
-          scope: "https://www.googleapis.com/auth/calendar",
+          scope: "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.readonly",
           callback: function(resp){
             if (resp.error){
               gError("接続がキャンセルされたか、エラーになりました: " + resp.error);
@@ -1116,6 +1108,15 @@
       function kvLoad(){
         return Promise.all([kvGet(CACHE_KEY), kvGet(LOCAL_KEY)]).then(function(r){ PRE.cache = r[0]; PRE.local = r[1]; });
       }
+      /* P2-15: 別タブがキャッシュを上書きしたら共有ストレージを読み直す */
+      window.addEventListener("storage", function(e){
+        if (e.key !== CACHE_KEY && e.key !== LOCAL_KEY) return;
+        Promise.all([kvGet(CACHE_KEY), kvGet(LOCAL_KEY)]).then(function(r){
+          PRE.cache = r[0]; PRE.local = r[1];
+          loadStored(); idxDirty = true;
+          renderAll(); markSelected(); showDetail(key(selected)); syncTitle();
+        });
+      });
       function fg(c){ return luminance(c) > 0.62 ? "#222" : "#fff"; }
       function toMin(t){ var p = (t || "0:0").split(":"); return (+p[0]) * 60 + (+p[1]); }
       function fmtMin(m){ return pad(Math.floor(m / 60)) + ":" + pad(m % 60); }
@@ -1160,7 +1161,7 @@
       }
       function applyItem(item, calId, oldUid){
         var cal = calById(calId), ev = cal ? normalizeEvent(item, cal) : null;
-        if (!ev){ syncAll(); return; }
+        if (!ev){ console.warn("normalizeEvent failed on calendar " + calId + ", skipping item"); return; } /* P2-11: 全件再同期を誘発しない */
         events = events.filter(function(x){ return x.uid !== oldUid && x.uid !== ev.uid; });
         events.push(ev);
         saveCache(); renderAll(); observeLabels(); markSelected(); showDetail(key(selected)); syncTitle();
@@ -1258,6 +1259,7 @@
           var s = new Date(it.start.dateTime), e = it.end && it.end.dateTime ? new Date(it.end.dateTime) : s;
           startKey = key(s);
           var eDay = new Date(e.getFullYear(), e.getMonth(), e.getDate());
+          /* P2-17: 終了00:00ちょうどは開始日のみに表示（00:15終わりと扱いが分かれるのは意図的な仕様） */
           if (e.getHours()===0 && e.getMinutes()===0 && e.getTime()>s.getTime()) eDay.setDate(eDay.getDate()-1);
           var ex = new Date(eDay); ex.setDate(ex.getDate()+1);
           endKeyExcl = key(ex);
@@ -1517,29 +1519,7 @@
       }
       var themeMeta = null, lastTheme = "#c0453e";
       function setThemeColor(v){ lastTheme = v; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", v); }
-      function applyFx(){
-        var f = settings.fx || {}, root = document.documentElement;
-        var m = document.querySelector('meta[name="theme-color"]');
-        if (f.noTheme){ if (m){ themeMeta = m; m.remove(); } }
-        else if (!m && themeMeta){ themeMeta.setAttribute("content", lastTheme); document.head.appendChild(themeMeta); }
-        var vp = document.querySelector('meta[name="viewport"]');
-        if (vp) vp.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" + (f.noCover ? "" : ", viewport-fit=cover"));
-        root.classList.toggle("fx-fixed", !!f.fixedRoot);
-        root.style.setProperty("--fx-top", (f.topPad || 0) + "px");
-      }
-      function renderFx(){
-        var f = settings.fx = settings.fx || {}, box = document.getElementById("fxBox");
-        var rows = [["noTheme", "テーマ色の指定（theme-color）をやめる"], ["noCover", "画面全体表示（viewport-fit=cover）をやめる"], ["fixedRoot", "画面を固定配置（fixed）にする"]];
-        var h = rows.map(function(r){ return '<label class="fx-row"><span>' + r[1] + '</span><input type="checkbox" data-fx="' + r[0] + '"' + (f[r[0]] ? " checked" : "") + '></label>'; }).join("");
-        h += '<label class="fx-row"><span>上端を下げる</span><select data-fx="topPad">' + [0, 16, 32, 52].map(function(v){ return '<option value="' + v + '"' + ((f.topPad || 0) === v ? " selected" : "") + '>' + v + 'pt</option>'; }).join("") + '</select></label>';
-        box.innerHTML = h;
-      }
-      document.addEventListener("change", function(e){
-        var t = e.target, k = t.getAttribute && t.getAttribute("data-fx"); if (!k) return;
-        settings.fx = settings.fx || {};
-        settings.fx[k] = t.type === "checkbox" ? t.checked : +t.value;
-        saveSettings(); applyFx();
-      });
+      function applyFx(){}; /* P1-9: 試験用のぼけ診断（viewport改変含む）は削除 */
       function renderSetCalList(){
         var w = document.getElementById("setCalList"); w.innerHTML = "";
         if (!calendars.length){ w.innerHTML = '<div class="pal-note">Googleカレンダーに接続すると、カレンダーごとの色を変更できます。</div>'; return; }
@@ -1716,7 +1696,7 @@
             if (rok) h += '<div class="l-ev" style="color:var(--ink-2)"><span>六曜：'+rok+'</span></div>';
             if (!evs.length && !hol) h += '<div class="empty">予定なし</div>';
             evs.forEach(function(e){
-              h += '<div class="sw"><span class="sw-bg" aria-hidden="true">削除</span><div class="l-ev" data-ev="'+esc(e.uid)+'" role="button" title="ダブルタップで編集"><i style="background:'+e.color+'"></i><time>'+e.timeLabel+'</time><span>'+esc(e.title)+'</span></div></div>';
+              h += '<div class="sw"><span class="sw-bg" aria-hidden="true">削除</span><div class="l-ev" data-ev="'+esc(e.uid)+'" role="button" title="ダブルタップで編集"><i style="background:'+e.color+'"></i><time>'+esc(e.timeLabel)+'</time><span>'+esc(e.title)+'</span></div></div>';
             });
             h += "</div></div>";
           }
@@ -1782,7 +1762,7 @@
           tcols += '<div class="wcol wt' + (kk === key(selected) ? ' is-sel' : '') + '" data-date="'+kk+'" role="button" tabindex="0">';
           its.forEach(function(o){
             var e = o.e;
-            tcols += '<div class="w-ev" data-ev="'+esc(e.uid)+'" style="top:'+(o.s*HW/60)+'px;height:'+Math.max(16,(o.en-o.s)*HW/60-1)+'px;left:calc(100% * '+o.c+' / '+o.n+');width:calc(100% / '+o.n+' - 1px);background:'+e.color+';color:'+fg(e.color)+'">'+(o.n > 1 || e.startKey < kk ? "" : '<time>'+e.startTime+'</time>')+esc(e.title)+'</div>';
+            tcols += '<div class="w-ev" data-ev="'+esc(e.uid)+'" style="top:'+(o.s*HW/60)+'px;height:'+Math.max(16,(o.en-o.s)*HW/60-1)+'px;left:calc(100% * '+o.c+' / '+o.n+');width:calc(100% / '+o.n+' - 1px);background:'+e.color+';color:'+fg(e.color)+'">'+(o.n > 1 || e.startKey < kk ? "" : '<time>'+esc(e.startTime)+'</time>')+esc(e.title)+'</div>';
           });
           tcols += '</div>';
         }
@@ -1804,7 +1784,7 @@
           + (rok ? '<span class="wk-rok">'+rok+'</span>' : '') + '</div><div class="wk-evs">';
         if (!evs.length) h += '<div class="wk-none">予定なし</div>';
         evs.slice(0,6).forEach(function(e){
-          h += '<div class="wk-ev" data-ev="'+esc(e.uid)+'" style="background:'+e.color+';color:'+fg(e.color)+'">' + (e.allDay ? "" : "<time>"+e.startTime+"</time>") + esc(e.title) + "</div>";
+          h += '<div class="wk-ev" data-ev="'+esc(e.uid)+'" style="background:'+e.color+';color:'+fg(e.color)+'">' + (e.allDay ? "" : "<time>"+esc(e.startTime)+"</time>") + esc(e.title) + "</div>";
         });
         if (evs.length > 6) h += '<div class="wk-more">他 '+(evs.length-6)+' 件</div>';
         return h + "</div></div>";
@@ -1839,7 +1819,7 @@
         });
         h += '</div></div>';
         var first = 480;
-        if (true){
+        {
           var items = tm.map(function(e){
             var last = addDays(e.endKeyExcl, -1), s0 = e.startKey < k ? 0 : toMin(e.startTime), en = last > k ? 1440 : toMin(e.endTime);
             if (en <= s0) en = e.endTime === "00:00" ? 1440 : s0 + 30;
@@ -1860,7 +1840,7 @@
           items.forEach(function(o){
             var e = o.e;
             h += '<div class="tg-ev" data-ev="'+esc(e.uid)+'" style="top:'+(o.s*HH/60)+'px;height:'+Math.max(18,(o.en-o.s)*HH/60-1)+'px;left:calc(24px + (100% - 24px) * '+o.c+' / '+o.n
-               + ');width:calc((100% - 24px) / '+o.n+' - 2px);background:'+e.color+';color:'+fg(e.color)+'"><b>'+esc(e.title)+'</b><br><span>'+e.timeLabel+(e.location ? ' ・ '+esc(e.location) : '')+'</span></div>';
+               + ');width:calc((100% - 24px) / '+o.n+' - 2px);background:'+e.color+';color:'+fg(e.color)+'"><b>'+esc(e.title)+'</b><br><span>'+esc(e.timeLabel)+(e.location ? ' ・ '+esc(e.location) : '')+'</span></div>';
           });
           if (k === key(TODAY)){ var nw = new Date(); h += '<div class="tg-now" style="top:'+((nw.getHours()*60+nw.getMinutes())*HH/60)+'px"></div>'; }
           h += '</div>';
@@ -1883,7 +1863,7 @@
           var d = e.startDateObj, ym = d.getFullYear()+"年"+(d.getMonth()+1)+"月";
           if (ym !== lastMonth){ h += '<div class="month-label" data-ym="'+d.getFullYear()+'-'+d.getMonth()+'">'+(d.getMonth()+1)+'月<small>'+d.getFullYear()+'年</small></div>'; lastMonth = ym; }
           h += '<div class="dayrow '+dowClass(d)+'" data-date="'+e.startKey+'" role="button" tabindex="0"><div class="dcol"><b>'+d.getDate()+'</b><span>'+DOW[d.getDay()]+'</span></div>'
-             + '<div class="ecol"><div class="sw"><span class="sw-bg" aria-hidden="true">削除</span><div class="l-ev" data-ev="'+esc(e.uid)+'" role="button" title="ダブルタップで編集"><i style="background:'+e.color+'"></i><time>'+e.timeLabel+'</time><span>'+esc(e.title)+'</span></div></div></div></div>';
+             + '<div class="ecol"><div class="sw"><span class="sw-bg" aria-hidden="true">削除</span><div class="l-ev" data-ev="'+esc(e.uid)+'" role="button" title="ダブルタップで編集"><i style="background:'+e.color+'"></i><time>'+esc(e.timeLabel)+'</time><span>'+esc(e.title)+'</span></div></div></div></div>';
           shown++;
         });
         if (!shown) h += '<div style="padding:14px;font-size:12.5px;color:var(--ink-3)">該当する予定がありません</div>';
@@ -1922,15 +1902,7 @@
       }
       var ymRaf = 0;
       stage.addEventListener("scroll", function(){ if (ymRaf) return; ymRaf = requestAnimationFrame(function(){ ymRaf = 0; updateYm(); }); });
-      var observer = new IntersectionObserver(function(entries){
-        entries.forEach(function(en){
-          if (false){
-            var parts = en.target.getAttribute("data-ym").split("-");
-            ymTitle.textContent = parts[0]+"年"+(+parts[1]+1)+"月";
-          }
-        });
-      }, { root: stage, rootMargin: "-8% 0px -78% 0px" });
-      function observeLabels(){ stage.querySelectorAll(".month-label[data-ym]").forEach(function(el){ observer.observe(el); }); }
+      function observeLabels(){}; /* P3-12: 無効化されたIntersectionObserverは削除（ymTitleは既存のscroll rAFが更新） */
 
       /* ================= detail panel ================= */
       var detail = document.getElementById("detail"), detailIn = document.getElementById("detailIn");
@@ -1947,7 +1919,7 @@
           + (k===key(TODAY) ? '<small>今日</small>' : '') + (hol ? '<span class="hol-name">'+hol+'</span>' : '') + (rok ? '<span class="rok-name">'+rok+'</span>' : '') + '</h3>';
         if (!evs.length) h += '<div class="d-none">予定はありません</div>';
         evs.forEach(function(e){
-          h += '<button type="button" class="d-ev" data-ev="'+esc(e.uid)+'"><i style="background:'+e.color+'"></i><time>'+e.timeLabel+'</time><span class="t">'+esc(e.title)+'</span>'
+          h += '<button type="button" class="d-ev" data-ev="'+esc(e.uid)+'"><i style="background:'+e.color+'"></i><time>'+esc(e.timeLabel)+'</time><span class="t">'+esc(e.title)+'</span>'
              + (e.location ? '<span class="loc">'+esc(e.location)+'</span>' : '') + '</button>';
         });
         h += '<button class="d-add" id="dAdd">＋ この日に予定を追加</button>';
@@ -2310,14 +2282,11 @@
         var movedFar = dInf && Math.hypot(e.clientX - dInf.x, e.clientY - dInf.y) > 12;
         if (settings.gestures.dbltap && e.pointerType !== "mouse" && Date.now() >= suppressClickUntil && !movedFar){
           if (e.target.closest && !e.target.closest("input, textarea, select, button, [data-ev], [data-wkshift]")){
-            var evEl2 = null;
             var t2 = e.target.closest("[data-date], [data-dadd]");
             var dateK2 = t2 ? (t2.getAttribute("data-date") || t2.getAttribute("data-dadd")) : key(selected);
-            var tapId = (evEl2 && isListView()) ? ("ev:" + evEl2.getAttribute("data-ev")) : ("date:" + dateK2);
+            var tapId = "date:" + dateK2; /* P3-18: 常にnullだったevEl2を削除 */
             var now2 = Date.now();
             if (lastTap.id === tapId && now2 - lastTap.t < 350){
-              var wasEv = tapId.indexOf("ev:") === 0;
-              var evUid = wasEv ? tapId.slice(3) : null;
               lastTap = { t: 0, k: null, id: null };
               suppressClickUntil = Date.now() + 400;
               if (t2) openAddFor(dateK2);
@@ -2403,6 +2372,7 @@
         if (accessToken && window.google && google.accounts.oauth2){
           google.accounts.oauth2.revoke(accessToken, function(){});
         }
+        settings.consented = false; saveSettings(); /* P2-14: 解除時は同意フラグもリセット */
         accessToken = null; calendars = []; events = buildSampleEvents().concat(events.filter(function(x){ return x.local && x.calendarId === "__local"; })); hiddenCals = {}; kvSet(CACHE_KEY, null);
         document.getElementById("calSection").hidden = true;
         document.getElementById("calColorBox").hidden = true;
@@ -2523,11 +2493,8 @@
         document.getElementById("showHolidaysChk").checked = settings.showHolidays;
         document.getElementById("showRokuyoChk").checked = settings.showRokuyo;
         document.getElementById("gestDragChk").checked = settings.gestures.drag;
-        document.getElementById("gestLongChk").checked = settings.gestures.longpress !== false;
         document.getElementById("gestDblChk").checked = settings.gestures.dbltap;
-        document.getElementById("gestSwipeDelChk").checked = settings.gestures.swipeDelete !== false;
         document.getElementById("gestSwipeNavChk").checked = settings.gestures.swipeNav !== false;
-        document.getElementById("gestTwoFingerChk").checked = settings.gestures.twoFingerSwipe !== false;
         document.getElementById("ccFrame").value = settings.customTheme.frame;
         document.getElementById("ccPaper").value = settings.customTheme.paper;
         document.getElementById("ccInk").value = settings.customTheme.ink;
@@ -2574,7 +2541,7 @@
         if (!viewEnabled(currentView)) setView(settings.enabledViews[0]);
         else document.querySelectorAll(".tbtn").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-view") === currentView); });
       });
-      [["gestDragChk","drag"],["gestDblChk","dbltap"],["gestLongChk","longpress"],["gestSwipeDelChk","swipeDelete"],["gestSwipeNavChk","swipeNav"],["gestTwoFingerChk","twoFingerSwipe"]].forEach(function(pair){
+      [["gestDragChk","drag"],["gestDblChk","dbltap"],["gestSwipeNavChk","swipeNav"]].forEach(function(pair){
         document.getElementById(pair[0]).addEventListener("change", function(e){
           settings.gestures[pair[1]] = e.target.checked; saveSettings();
         });
@@ -2651,7 +2618,7 @@
       function boot(){
       loadSettings();
       clientId = settings.clientId || "";
-      applyFx(); renderFx();
+      applyFx();
       var cachedAt = loadStored();
       document.getElementById("clientIdInput").value = clientId;
       applyAppearance();
@@ -2760,6 +2727,7 @@
       syncTitle();
       }
       kvLoad().then(boot);
+      if ("serviceWorker" in navigator){ try { navigator.serviceWorker.register("sw.js").catch(function(){}); } catch(e){} }
     </script>
   </body>
 </html>
